@@ -5,6 +5,7 @@ public class PlayerBattleState {
 	private int currHealth, currStrength, currSpeed, currStamina, currKnowledge;
 	private Player player;
 	private String currMove;
+	private boolean faster;
 	
 	public PlayerBattleState(Player player) {
 		this.player = player;
@@ -15,7 +16,16 @@ public class PlayerBattleState {
 		this.currStamina = player.getStamina();
 		this.currKnowledge = player.getKnowledge();
 		this.currMove = null;
+		this.faster = false;
 	
+	}
+
+	protected boolean isFaster() {
+		return faster;
+	}
+
+	protected void setFaster(boolean faster) {
+		this.faster = faster;
 	}
 
 	protected String getName() {

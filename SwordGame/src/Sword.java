@@ -8,8 +8,8 @@ public class Sword {
 		//mongodb get sword and stats
 		this.name = name;
 		this.damage = 20;
-		this.weight = 1;
-		this.peircing = 0;
+		this.weight = 10;
+		this.peircing = 10;
 		this.durability = 10;
 		
 	}

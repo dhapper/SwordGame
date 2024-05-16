@@ -16,28 +16,28 @@ public class BattleLogic {
 		
 		while(!battleOver) {
 			
-			System.out.println("***********");
+			System.out.println("***********************");
 			System.out.println("Turn "+turnNum+":");
 			turnNum++;
 			
 			A.setCurrMove(promptUser(A));
-			//System.out.println("fff: "+A.getCurrMove());
+			System.out.println("A's current move: "+A.getCurrMove());
 			B.setCurrMove(promptUser(B));
-			//System.out.println("fff: "+B.getCurrMove());
+			System.out.println("B's current Move: "+B.getCurrMove()+"\n");
 
 			TurnLogic tl = new TurnLogic();
 			
 			if(tl.speedComparison(A, B) == A) {
-				tl.swing(A, B);
+				tl.attack(A, B);
 				if(checkDeath(A, B)!=null)
 					return checkDeath(A, B);
 				checkDeath(A, B);
-				tl.swing(B, A);
+				tl.attack(B, A);
 			} else {
-				tl.swing(B, A);
+				tl.attack(B, A);
 				if(checkDeath(A, B)!=null)
 					return checkDeath(A, B);
-				tl.swing(A, B);
+				tl.attack(A, B);
 			}
 		}
 		return checkDeath(A, B);

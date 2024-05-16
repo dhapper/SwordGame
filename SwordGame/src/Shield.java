@@ -6,9 +6,9 @@ public class Shield {
 	public Shield(String name) {
 		// mongodb get sword and stats
 		this.name = name;
-		this.resistance = 10;
+		this.resistance = 80;
 		this.durability = 10;
-		this.weight = 1;
+		this.weight = 10;
 		
 	}
 

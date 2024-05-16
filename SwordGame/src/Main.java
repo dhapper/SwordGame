@@ -6,6 +6,7 @@ public class Main {
 		//login, return username
 		
 		//access mongodb, get attributes
+		// (String nickName, int health, int strength, int speed, int stamina, int knowledge)
 		Player a = new Player("a", 50, 20, 100, 100, 100);
 		Player b = new Player("b", 50, 20, 100, 100, 100);
 		

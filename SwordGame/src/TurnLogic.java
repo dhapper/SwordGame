@@ -2,73 +2,102 @@ import java.util.Random;
 
 public class TurnLogic {
 	
-	public void swing(PlayerBattleState attacker, PlayerBattleState defender) {
+	public void attack(PlayerBattleState attacker, PlayerBattleState defender) {
 		
+		if(!attacker.getCurrMove().equals("BLOCK")) {
+			
+			Random random = new Random();
+	        double randomMultiplier = 0.9 + (random.nextDouble() * 0.2);
+			double baseAttack = (attacker.getCurrStrength() * attacker.getPlayer().getSword().getDamage() /100)
+					* (5 - defender.getPlayer().getArmour().getProtection());
+	        int totalAttack = (int) (baseAttack * randomMultiplier);
+	        
+	        // jab/block calcs
+	        if(attacker.getCurrMove().equals("JAB")) {
+	        	if(defender.getCurrMove().equals("BLOCK") && defender.isFaster())
+	        		totalAttack = 0;
+	        	else
+	        		totalAttack /= 2;
+	        }
+	        
+	        // swing/block calcs
+	        if(defender.getCurrMove().equals("BLOCK")) {
+	        	if(defender.isFaster()) {
+	        		System.out.println("resistance: "+defender.getPlayer().getShield().getResistance());
+	        		System.out.println("piercing: "+attacker.getPlayer().getSword().getPeircing());
+	        		System.out.println("initial damage: "+totalAttack);
+	        		int shieldLeak = defender.getPlayer().getShield().getResistance()-attacker.getPlayer().getSword().getPeircing();
+	        		if(shieldLeak >= 100) {
+	        			totalAttack = 0;
+	        		}else if(shieldLeak > 0) {
+	        			totalAttack *= (1-shieldLeak/100.0);
+	        		}
+	        	}
+	        }
+			
+	        System.out.println("------");
+	        System.out.println(attacker.getName()+"'s damage: "+totalAttack);
+	        System.out.println(defender.getName()+"'s HP before: "+defender.getCurrHealth());
+	        
+			defender.setCurrHealth(defender.getCurrHealth()-totalAttack);
+			
+			System.out.println(defender.getName()+"'s HP after: "+defender.getCurrHealth());
+			
+		}
 		
-		System.out.println("------");
-		System.out.println(defender.getName()+" before: "+defender.getCurrHealth());
+		// remove stamina
+		if(attacker.getCurrMove().equals("SWING")) {
+			
+		}else if(attacker.getCurrMove().equals("JAB")) {
+			
+		}else if(attacker.getCurrMove().equals("BLOCK")) {
+			
+		}
 		
-		// if !block 
-		int strength = attacker.getCurrStrength();
-		int damage = attacker.getPlayer().getSword().getDamage();
-		int remainingHealth = defender.getCurrHealth();
-		double armour = defender.getPlayer().getArmour().getProtection();
-		
-		double baseAttack = (strength*damage/100)*(5-armour);
-		Random random = new Random();
-        double randomMultiplier = 0.9 + (random.nextDouble() * 0.2);
-        int totalAttack = (int) (baseAttack * randomMultiplier);
-		
-        System.out.println(attacker.getName()+" damage: "+totalAttack);
-        
-		defender.setCurrHealth(remainingHealth-totalAttack);
-		
-		System.out.println(defender.getName()+" after: "+defender.getCurrHealth());
-		// if block
 	}
 	
-	public PlayerBattleState speedComparison(PlayerBattleState A, PlayerBattleState B) {	//can optimize alottttttttt
+	public PlayerBattleState speedComparison(PlayerBattleState A, PlayerBattleState B) {
 		Random random = new Random();
 		double multiplierA = 0.9 + (random.nextDouble() * 0.2);
 		double multiplierB = 0.9 + (random.nextDouble() * 0.2);
 		int speedA = speedCheck(A, multiplierA);
 		int speedB = speedCheck(B, multiplierB);
-		System.out.println("speed A: "+speedA);
-		System.out.println("speed B: "+speedB);
-		if(speedA>speedB)
+		System.out.println(A.getName()+"'s speed: "+speedA);
+		System.out.println(B.getName()+"'s speed: "+speedB);
+		if(speedA>speedB) {
+			A.setFaster(true);
+			B.setFaster(false);
 			return A;
-		else if(speedB>speedA)
+		} else if(speedB>speedA) {
+			B.setFaster(true);
+			A.setFaster(false);
 			return B;
-		else {
-			if(random.nextInt(2) == 1)
+		}else {
+			if(random.nextInt(2) == 1) {
+				A.setFaster(true);
+				B.setFaster(false);
 				return A;
+			}
 		}
+		B.setFaster(true);
+		A.setFaster(false);
 		return B;
 	}
 	
-	public int speedCheck(PlayerBattleState player, double randomMultiplier) {
+	public int speedCheck(PlayerBattleState player, double randomMultiplier) {	// rework speed
 		
+		double baseArmourSpeed = player.getCurrSpeed() * player.getPlayer().getArmour().getWeight();
         if(player.getCurrMove().equals("BLOCK")) {
-        	double blockSpeed = player.getCurrSpeed()
-    				* player.getPlayer().getArmour().getWeight()
-    				* player.getPlayer().getShield().getWeight();
+        	double blockSpeed = baseArmourSpeed - player.getPlayer().getShield().getWeight();
     		return (int) (blockSpeed * randomMultiplier);
-        }
-        
-        double jabSpeed = player.getCurrSpeed()
-				* player.getPlayer().getArmour().getWeight()
-				* player.getPlayer().getSword().getWeight();
-        if(player.getCurrMove().equals("JAB")) {
+        } else if(player.getCurrMove().equals("JAB")) {
+        	double jabSpeed = baseArmourSpeed - player.getPlayer().getSword().getWeight();
     		return (int) (jabSpeed * randomMultiplier);
+        } else if(player.getCurrMove().equals("SWING")) {
+        	double swingSpeed = baseArmourSpeed - player.getPlayer().getSword().getWeight();
+    		return (int) (swingSpeed * randomMultiplier / 2);
         }
         
-        if(player.getCurrMove().equals("SWING")) {
-        	double swingSpeed = (player.getCurrSpeed()
-        			- player.getPlayer().getSword().getWeight())
-    				* player.getPlayer().getArmour().getWeight();
-    		return (int) (swingSpeed * randomMultiplier);
-        }
-		
 		return 0;		
 	}
 	

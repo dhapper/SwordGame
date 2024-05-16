@@ -2,13 +2,13 @@
 public class Armour {
 
 	private String name;
-	private double protection, weight;
+	private double protection, speedModifier;
 	
 	public Armour(String name) {
 		//mongodb get sword and stats
 		this.name = name;
 		this.protection = 1;
-		this.weight = 1;
+		this.speedModifier = 1;
 		
 	}
 
@@ -29,11 +29,11 @@ public class Armour {
 	}
 
 	public double getWeight() {
-		return weight;
+		return speedModifier;
 	}
 
 	public void setWeight(double weight) {
-		this.weight = weight;
+		this.speedModifier = weight;
 	}
 	
 	
