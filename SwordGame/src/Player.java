@@ -1,37 +1,39 @@
+import java.util.ArrayList;
 
 public class Player {
 	
-	private String nickName;
+	private String username, nickname;
     private int health, strength, speed, stamina, knowledge;
-    private Sword sword;
-    private Shield shield;
-    private Armour armour;
+    private Inventory inventory;
     
-	public Player(String nickName, int health, int strength, int speed, int stamina, int knowledge) {
-		this.nickName = nickName;
+    private ArrayList<Sword> swords = new ArrayList<>();
+    
+	public Player(String username) {
+		/*this.username = username;
+		this.nickname = username;
         this.health = health;
         this.strength = strength;
         this.speed = speed;
         this.stamina = stamina;
-        this.knowledge = knowledge;
-        this.sword = new Sword("basic");
-        this.shield = new Shield("wood shield");
-        this.armour = new Armour("shirt");
+        this.knowledge = knowledge;*/
+        
+        this.inventory = new Inventory(this);
         
 	}
 	
 	public void displayStats() {
-		System.out.println(nickName+"\n"+health+"\n"+strength+"\n"+speed+"\n"+stamina+"\n"+knowledge);
+		System.out.println("Displaying Player's Stats:");
+		System.out.println(username+"\n"+nickname+"\n"+health+"\n"+strength+"\n"+speed+"\n"+stamina+"\n"+knowledge);
 	}
 
 	
 	// getters and setters
-	public String getNickName() {
-		return nickName;
+	public String getNickname() {
+		return nickname;
 	}
 
-	public void setNickName(String nickName) {
-		this.nickName = nickName;
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 
 	public int getHealth() {
@@ -74,30 +76,17 @@ public class Player {
 		this.knowledge = knowledge;
 	}
 
-	public Sword getSword() {
-		return sword;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setSword(Sword sword) {
-		this.sword = sword;
-	}
-
-	public Shield getShield() {
-		return shield;
-	}
-
-	public void setShield(Shield shield) {
-		this.shield = shield;
-	}
-
-	public Armour getArmour() {
-		return armour;
-	}
-
-	public void setArmour(Armour armour) {
-		this.armour = armour;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	
-	
+	public Inventory getInventory() {
+		return inventory;
+		
+	}
 	
 }

@@ -4,8 +4,11 @@ public class BattleLogic {
 
 	
 	
-	public void battleManager(PlayerBattleState A, PlayerBattleState B) {
-		String result = battleLoop(A, B);
+	public void battleManager(Player A, Player B) {
+		PlayerBattleState pbsA = new PlayerBattleState(A);
+		PlayerBattleState pbsB = new PlayerBattleState(B);
+		String result = battleLoop(pbsA, pbsB);
+		
 		System.out.println("Result: "+result);	// result dies
 	}
 	

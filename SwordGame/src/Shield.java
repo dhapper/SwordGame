@@ -1,49 +1,63 @@
 
 public class Shield {
 	private String name;
-	private int weight, resistance, durability;
+	private int weight, resistance, durability, staminaUsage;
 	
 	public Shield(String name) {
 		// mongodb get sword and stats
-		this.name = name;
+		/*this.name = name;
 		this.resistance = 80;
 		this.durability = 10;
 		this.weight = 10;
-		
+		this.staminaUsage = 1;*/
+		this.name = name;
+	}
+	
+	public void displayStats() {
+		System.out.println("Displaying Shield's Stats:");
+		System.out.println(name+"\n"+resistance+"\n"+weight+"\n"+durability+"\n"+durability+"\n"+staminaUsage);
 	}
 
-	protected String getName() {
+	public String getName() {
 		return name;
 	}
 
-	protected void setName(String name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
-	protected int getResistance() {
-		return resistance;
-	}
-
-	protected void setResistance(int resistance) {
-		this.resistance = resistance;
-	}
-
-	protected int getDurability() {
-		return durability;
-	}
-
-	protected void setDurability(int durability) {
-		this.durability = durability;
-	}
-
-	protected int getWeight() {
+	public int getWeight() {
 		return weight;
 	}
 
-	protected void setWeight(int weight) {
+	public void setWeight(int weight) {
 		this.weight = weight;
 	}
-	
+
+	public int getResistance() {
+		return resistance;
+	}
+
+	public void setResistance(int resistance) {
+		this.resistance = resistance;
+	}
+
+	public int getDurability() {
+		return durability;
+	}
+
+	public void setDurability(int durability) {
+		this.durability = durability;
+	}
+
+	public int getStaminaUsage() {
+		return staminaUsage;
+	}
+
+	public void setStaminaUsage(int staminaUsage) {
+		this.staminaUsage = staminaUsage;
+	}
+
 	
 	
 }

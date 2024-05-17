@@ -7,9 +7,11 @@ public class PlayerBattleState {
 	private String currMove;
 	private boolean faster;
 	
+	private int swordChoice;
+	
 	public PlayerBattleState(Player player) {
 		this.player = player;
-		this.name = player.getNickName();
+		this.name = player.getNickname();
 		this.currHealth = player.getHealth();
 		this.currStrength = player.getStrength();
 		this.currSpeed = player.getSpeed();
@@ -17,6 +19,8 @@ public class PlayerBattleState {
 		this.currKnowledge = player.getKnowledge();
 		this.currMove = null;
 		this.faster = false;
+		
+		this.swordChoice = 0;
 	
 	}
 

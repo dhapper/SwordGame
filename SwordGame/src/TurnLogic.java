@@ -8,8 +8,8 @@ public class TurnLogic {
 			
 			Random random = new Random();
 	        double randomMultiplier = 0.9 + (random.nextDouble() * 0.2);
-			double baseAttack = (attacker.getCurrStrength() * attacker.getPlayer().getSword().getDamage() /100)
-					* (5 - defender.getPlayer().getArmour().getProtection());
+			double baseAttack = (attacker.getCurrStrength() * attacker.getPlayer().getInventory().getActiveSword().getDamage() /10)
+					- (defender.getPlayer().getInventory().getActiveArmour().getProtection());
 	        int totalAttack = (int) (baseAttack * randomMultiplier);
 	        
 	        // jab/block calcs
@@ -23,10 +23,10 @@ public class TurnLogic {
 	        // swing/block calcs
 	        if(defender.getCurrMove().equals("BLOCK")) {
 	        	if(defender.isFaster()) {
-	        		System.out.println("resistance: "+defender.getPlayer().getShield().getResistance());
-	        		System.out.println("piercing: "+attacker.getPlayer().getSword().getPeircing());
+	        		System.out.println("resistance: "+defender.getPlayer().getInventory().getActiveShield().getResistance());
+	        		System.out.println("piercing: "+attacker.getPlayer().getInventory().getActiveSword().getPiercing());
 	        		System.out.println("initial damage: "+totalAttack);
-	        		int shieldLeak = defender.getPlayer().getShield().getResistance()-attacker.getPlayer().getSword().getPeircing();
+	        		int shieldLeak = defender.getPlayer().getInventory().getActiveShield().getResistance()-attacker.getPlayer().getInventory().getActiveSword().getPiercing();
 	        		if(shieldLeak >= 100) {
 	        			totalAttack = 0;
 	        		}else if(shieldLeak > 0) {
@@ -84,17 +84,18 @@ public class TurnLogic {
 		return B;
 	}
 	
-	public int speedCheck(PlayerBattleState player, double randomMultiplier) {	// rework speed
+	public int speedCheck(PlayerBattleState player, double randomMultiplier) {
 		
-		double baseArmourSpeed = player.getCurrSpeed() * player.getPlayer().getArmour().getWeight();
+		double baseArmourSpeed = player.getCurrSpeed()/100.0 * player.getPlayer().getInventory().getActiveArmour().getSpeedModifier();
+		
         if(player.getCurrMove().equals("BLOCK")) {
-        	double blockSpeed = baseArmourSpeed - player.getPlayer().getShield().getWeight();
+        	double blockSpeed = baseArmourSpeed - player.getPlayer().getInventory().getActiveShield().getWeight();
     		return (int) (blockSpeed * randomMultiplier);
         } else if(player.getCurrMove().equals("JAB")) {
-        	double jabSpeed = baseArmourSpeed - player.getPlayer().getSword().getWeight();
+        	double jabSpeed = baseArmourSpeed - player.getPlayer().getInventory().getActiveSword().getWeight();
     		return (int) (jabSpeed * randomMultiplier);
         } else if(player.getCurrMove().equals("SWING")) {
-        	double swingSpeed = baseArmourSpeed - player.getPlayer().getSword().getWeight();
+        	double swingSpeed = baseArmourSpeed - player.getPlayer().getInventory().getActiveSword().getWeight();
     		return (int) (swingSpeed * randomMultiplier / 2);
         }
         
