@@ -3,9 +3,12 @@ public class PlayerBattleState {
 
 	private String name;
 	private int currHealth, currStrength, currSpeed, currStamina, currKnowledge;
+	private double currCharge;
 	private Player player;
 	private String currMove;
 	private boolean faster;
+	private int maxHealth, maxStamina;
+	private int blockCounter;
 	
 	private int swordChoice;
 	
@@ -17,10 +20,16 @@ public class PlayerBattleState {
 		this.currSpeed = player.getSpeed();
 		this.currStamina = player.getStamina();
 		this.currKnowledge = player.getKnowledge();
-		this.currMove = null;
-		this.faster = false;
+		this.currCharge = 1;
+		this.blockCounter = 0;
 		
-		this.swordChoice = 0;
+		this.currMove = null;
+		
+		this.maxHealth = player.getHealth();
+		this.maxStamina = player.getStamina();
+		
+		this.faster = false;
+		//this.swordChoice = 0;
 	
 	}
 
@@ -96,6 +105,59 @@ public class PlayerBattleState {
 		this.currMove = currMove;
 	}
 
+	public void addToCurrStamina(int stamina) {
+		this.currStamina += stamina;
+	}
+
+	public int getMaxHealth() {
+		return maxHealth;
+	}
+
+	public void setMaxHealth(int maxHealth) {
+		this.maxHealth = maxHealth;
+	}
+
+	public int getSwordChoice() {
+		return swordChoice;
+	}
+
+	public void setSwordChoice(int swordChoice) {
+		this.swordChoice = swordChoice;
+	}
+
+	public int getMaxStamina() {
+		return maxStamina;
+	}
+
+	public void setMaxStamina(int maxStamina) {
+		this.maxStamina = maxStamina;
+	}
+
+	public double getCurrCharge() {
+		return currCharge;
+	}
+
+	public void setCurrCharge(double currCharge) {
+		this.currCharge = currCharge;
+	}
 		
+	public void increaseCurrCharge() {
+		if(this.currCharge == 1)
+			this.currCharge += 0.25;
+		else
+			this.currCharge += 0.75;
+	}
+
+	public int getBlockCounter() {
+		return blockCounter;
+	}
+
+	public void setBlockCounter(int blockCounter) {
+		this.blockCounter = blockCounter;
+	}
+	
+	public void increaseBlockCounter() {
+		this.blockCounter++;
+	}
 	
 }

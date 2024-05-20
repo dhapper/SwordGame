@@ -1,7 +1,7 @@
 
 public class Shield {
 	private String name;
-	private int weight, resistance, durability, staminaUsage;
+	private int weight, resistance, durability, staminaRegain;
 	
 	public Shield(String name) {
 		this.name = name;
@@ -9,7 +9,7 @@ public class Shield {
 	
 	public void displayStats() {
 		System.out.println("Displaying Shield's Stats:");
-		System.out.println(name+"\n"+resistance+"\n"+weight+"\n"+durability+"\n"+durability+"\n"+staminaUsage);
+		System.out.println(name+"\n"+resistance+"\n"+weight+"\n"+durability+"\n"+durability+"\n"+staminaRegain);
 	}
 
 	public String getName() {
@@ -44,12 +44,12 @@ public class Shield {
 		this.durability = durability;
 	}
 
-	public int getStaminaUsage() {
-		return staminaUsage;
+	public int getStaminaRegain() {
+		return staminaRegain;
 	}
 
-	public void setStaminaUsage(int staminaUsage) {
-		this.staminaUsage = staminaUsage;
+	public void setStaminaRegain(int staminaRegain) {
+		this.staminaRegain = staminaRegain;
 	}
 
 	

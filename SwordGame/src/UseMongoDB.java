@@ -69,7 +69,7 @@ public class UseMongoDB {
 	        shield.setWeight(Doc.getInteger("weight"));
 	        shield.setResistance(Doc.getInteger("resistance"));
 	        shield.setDurability(Doc.getInteger("durability"));
-	        shield.setStaminaUsage(Doc.getInteger("stamina usage"));
+	        shield.setStaminaRegain(Doc.getInteger("stamina regain"));
             return shield;
 		}
 		return null;
@@ -83,7 +83,6 @@ public class UseMongoDB {
 			Document Doc = cursor.next();
 			Armour armour = new Armour(name);
 	        armour.setProtection(Doc.getInteger("protection"));
-	        armour.setStaminaUsage(Doc.getInteger("stamina usage"));
 	        armour.setSpeedModifier(Doc.getInteger("speed modifier"));
             return armour;
 		}
@@ -178,13 +177,14 @@ public class UseMongoDB {
 		if(cursor.hasNext()) {
 			Document Doc = cursor.next();
 			if(itemType == "ACTIVE_SWORD") {
-				player.getInventory().setActiveSword(new Sword(Doc.getString("active sword")));	
+				player.getInventory().setActiveSword(getSword(Doc.getString("active sword")));
+				
 			} else if(itemType == "INACTIVE_SWORD") {
-				player.getInventory().setInactiveSword(new Sword(Doc.getString("inactive sword")));	
+				player.getInventory().setInactiveSword(getSword(Doc.getString("inactive sword")));	
 			} else if(itemType == "ACTIVE_SHIELD") {
-				player.getInventory().setActiveShield(new Shield(Doc.getString("active shield")));	
+				player.getInventory().setActiveShield(getShield(Doc.getString("active shield")));	
 			} else if(itemType == "ACTIVE_ARMOUR") {
-				player.getInventory().setActiveArmour(new Armour(Doc.getString("active armour")));		
+				player.getInventory().setActiveArmour(getArmour(Doc.getString("active armour")));		
 			}
 		}
 	}

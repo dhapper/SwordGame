@@ -4,20 +4,20 @@ public class TurnLogic {
 	
 	public void attack(PlayerBattleState attacker, PlayerBattleState defender) {
 		
-		if(!attacker.getCurrMove().equals("BLOCK")) {
+		if(!attacker.getCurrMove().equals("BLOCK") && !attacker.getCurrMove().equals("CHARGE")) {
 			
 			Random random = new Random();
 	        double randomMultiplier = 0.9 + (random.nextDouble() * 0.2);
-			double baseAttack = (attacker.getCurrStrength() * attacker.getPlayer().getInventory().getActiveSword().getDamage() /10)
+			double baseAttack = (attacker.getCurrStrength() * attacker.getPlayer().getInventory().getActiveSword().getDamage() /10.0)
 					- (defender.getPlayer().getInventory().getActiveArmour().getProtection());
-	        int totalAttack = (int) (baseAttack * randomMultiplier);
+	        int totalAttack = (int) (baseAttack * randomMultiplier * attacker.getCurrCharge());
 	        
 	        // jab/block calcs
 	        if(attacker.getCurrMove().equals("JAB")) {
 	        	if(defender.getCurrMove().equals("BLOCK") && defender.isFaster())
 	        		totalAttack = 0;
 	        	else
-	        		totalAttack /= 2;
+	        		totalAttack /= 2.0;
 	        }
 	        
 	        // swing/block calcs
@@ -26,6 +26,7 @@ public class TurnLogic {
 	        		System.out.println("resistance: "+defender.getPlayer().getInventory().getActiveShield().getResistance());
 	        		System.out.println("piercing: "+attacker.getPlayer().getInventory().getActiveSword().getPiercing());
 	        		System.out.println("initial damage: "+totalAttack);
+	        		System.out.println("----------------------------------------------");
 	        		int shieldLeak = defender.getPlayer().getInventory().getActiveShield().getResistance()-attacker.getPlayer().getInventory().getActiveSword().getPiercing();
 	        		if(shieldLeak >= 100) {
 	        			totalAttack = 0;
@@ -35,25 +36,46 @@ public class TurnLogic {
 	        	}
 	        }
 			
-	        System.out.println("------");
+	       
 	        System.out.println(attacker.getName()+"'s damage: "+totalAttack);
 	        System.out.println(defender.getName()+"'s HP before: "+defender.getCurrHealth());
 	        
 			defender.setCurrHealth(defender.getCurrHealth()-totalAttack);
 			
 			System.out.println(defender.getName()+"'s HP after: "+defender.getCurrHealth());
+			System.out.println("----------------------------------------------");
+			
+			attacker.setCurrCharge(1);
 			
 		}
 		
-		// remove stamina
+		// stamina & block counter & charge calcs
+		System.out.println(attacker.getName()+"'s stamina before: "+attacker.getCurrStamina());
 		if(attacker.getCurrMove().equals("SWING")) {
-			
-		}else if(attacker.getCurrMove().equals("JAB")) {
-			
-		}else if(attacker.getCurrMove().equals("BLOCK")) {
-			
+			attacker.addToCurrStamina(-attacker.getPlayer().getInventory().getActiveSword().getStaminaUsage());
+			attacker.setBlockCounter(0);
+		} else if(attacker.getCurrMove().equals("JAB")) {
+			attacker.addToCurrStamina(-attacker.getPlayer().getInventory().getActiveSword().getStaminaUsage()/2);
+			attacker.setBlockCounter(0);
+		} else if(attacker.getCurrMove().equals("BLOCK")) {
+			attacker.addToCurrStamina(attacker.getPlayer().getInventory().getActiveShield().getStaminaRegain());
+			attacker.increaseBlockCounter();
+		} else if(attacker.getCurrMove().equals("CHARGE")) {
+			//if(!(attacker.getCurrCharge() == 1.75)) {
+				attacker.increaseCurrCharge();
+			//}
+			attacker.addToCurrStamina(attacker.getPlayer().getInventory().getActiveSword().getStaminaUsage()/2);
 		}
 		
+		
+		if(attacker.getCurrStamina() > attacker.getMaxStamina()) {
+			attacker.setCurrStamina(attacker.getMaxStamina());
+		}
+		System.out.println(attacker.getName()+"'s stamina after: "+attacker.getCurrStamina());
+		System.out.println("----------------------------------------------");
+		System.out.println(attacker.getCurrCharge());
+
+
 	}
 	
 	public PlayerBattleState speedComparison(PlayerBattleState A, PlayerBattleState B) {
@@ -64,6 +86,7 @@ public class TurnLogic {
 		int speedB = speedCheck(B, multiplierB);
 		System.out.println(A.getName()+"'s speed: "+speedA);
 		System.out.println(B.getName()+"'s speed: "+speedB);
+		System.out.println("----------------------------------------------");
 		if(speedA>speedB) {
 			A.setFaster(true);
 			B.setFaster(false);

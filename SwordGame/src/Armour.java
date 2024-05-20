@@ -3,7 +3,6 @@ public class Armour {
 
 	private String name;
 	private double protection, speedModifier;
-	private int staminaUsage;
 	
 	public Armour(String name) {
 		this.name = name;
@@ -11,7 +10,7 @@ public class Armour {
 	
 	public void displayStats() {
 		System.out.println("Displaying Armour's Stats:");
-		System.out.println(name+"\n"+protection+"\n"+speedModifier+"\n"+staminaUsage);
+		System.out.println(name+"\n"+protection+"\n"+speedModifier);
 	}
 
 	public String getName() {
@@ -38,14 +37,6 @@ public class Armour {
 		this.speedModifier = speedModifier;
 	}
 
-	public double getStaminaUsage() {
-		return staminaUsage;
-	}
-
-	public void setStaminaUsage(int staminaUsage) {
-		this.staminaUsage = staminaUsage;
-	}
-	
 	
 	
 }
