@@ -2,8 +2,6 @@ import java.util.Scanner;
 
 public class BattleLogic {
 
-	
-	
 	public void battleManager(Player A, Player B) {
 		PlayerBattleState pbsA = new PlayerBattleState(A);
 		PlayerBattleState pbsB = new PlayerBattleState(B);
@@ -15,7 +13,6 @@ public class BattleLogic {
 	public String battleLoop(PlayerBattleState A, PlayerBattleState B) {
 		boolean battleOver = false;
 		int turnNum = 1;
-		
 		
 		while(!battleOver) {
 			

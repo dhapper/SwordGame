@@ -3,21 +3,14 @@ import java.util.ArrayList;
 public class Player {
 	
 	private String username, nickname;
+	private Inventory inventory;
     private int health, strength, speed, stamina, knowledge;
-    private Inventory inventory;
-    
-    private ArrayList<Sword> swords = new ArrayList<>();
     
 	public Player(String username) {
-		/*this.username = username;
-		this.nickname = username;
-        this.health = health;
-        this.strength = strength;
-        this.speed = speed;
-        this.stamina = stamina;
-        this.knowledge = knowledge;*/
-        
+		this.username = username;
+		
         this.inventory = new Inventory(this);
+        this.inventory.updatePlayerInventory();
         
 	}
 	
@@ -26,7 +19,6 @@ public class Player {
 		System.out.println(username+"\n"+nickname+"\n"+health+"\n"+strength+"\n"+speed+"\n"+stamina+"\n"+knowledge);
 	}
 
-	
 	// getters and setters
 	public String getNickname() {
 		return nickname;

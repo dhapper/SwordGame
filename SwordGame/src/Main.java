@@ -6,23 +6,28 @@ public class Main {
 		//login, return username
 		String username = "dhapper";
 		
-		
-		//access mongodb, get attributes
 		UseMongoDB mongo = new UseMongoDB();
 		Player player = mongo.getPlayer(username);
-		Player enemy = mongo.getPlayer("test");
 		
-		player.getInventory().swapActiveSword();
+		System.out.println(player.getInventory().getSwords().get(0).getName());
+		System.out.println(player.getInventory().getSwords().get(1).getName());
+	
+		System.out.println(player.getInventory().getArmoury().get(0).getName());
+		System.out.println(player.getInventory().getArmoury().get(1).getName());
 		
-		//player.getInventory().getActiveSword().displayStats();
-		//player.getInventory().getActiveShield().displayStats();
-		//player.getInventory().getActiveArmour().displayStats();
+		System.out.println(player.getInventory().getShields().get(0).getName());
+		System.out.println(player.getInventory().getShields().get(1).getName());
+		
+		System.out.println();
+		System.out.println(player.getInventory().getActiveSword().getName());
+		System.out.println(player.getInventory().getInactiveSword().getName());
+		System.out.println(player.getInventory().getActiveShield().getName());
+		System.out.println(player.getInventory().getActiveArmour().getName());
 		
 		
 		BattleLogic bl = new BattleLogic();
 		
-		
-		bl.battleManager(player, enemy);
+		//bl.battleManager(player, enemy);
 		
 	}
 

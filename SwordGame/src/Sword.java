@@ -5,14 +5,7 @@ public class Sword {
 	private int damage, weight, piercing, durability, staminaUsage;
 	
 	public Sword(String name) {
-		//mongodb get sword and stats
 		this.name = name;
-		this.damage = 20;
-		this.weight = 10;
-		this.piercing = 10;
-		this.durability = 10;
-		this.staminaUsage = 1;
-		
 	}
 	
 	public void displayStats() {

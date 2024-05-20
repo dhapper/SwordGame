@@ -6,11 +6,7 @@ public class Armour {
 	private int staminaUsage;
 	
 	public Armour(String name) {
-		//mongodb get sword and stats
 		this.name = name;
-		this.protection = 1;
-		this.speedModifier = 1;
-		this.staminaUsage = 1;
 	}
 	
 	public void displayStats() {

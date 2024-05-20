@@ -4,12 +4,6 @@ public class Shield {
 	private int weight, resistance, durability, staminaUsage;
 	
 	public Shield(String name) {
-		// mongodb get sword and stats
-		/*this.name = name;
-		this.resistance = 80;
-		this.durability = 10;
-		this.weight = 10;
-		this.staminaUsage = 1;*/
 		this.name = name;
 	}
 	
