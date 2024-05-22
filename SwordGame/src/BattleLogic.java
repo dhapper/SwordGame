@@ -3,21 +3,28 @@ import java.util.concurrent.TimeUnit;
 
 public class BattleLogic {
 
-	public void battleManager(Player A, Player B) {
-		PlayerBattleState pbsA = new PlayerBattleState(A);
-		PlayerBattleState pbsB = new PlayerBattleState(B);
-		
+	PlayerBattleState pbsA;
+	PlayerBattleState pbsB;
+	DrawBattle drawBattle;
+	boolean turnA;
+	boolean battleOver;
+	String deadPlayer;
+	
+	public BattleLogic(Player A, Player B) {
+		this.battleOver = false;
+		this.pbsA = new PlayerBattleState(A);
+		this.pbsB = new PlayerBattleState(B);
 		
 		String result = battleLoop(pbsA, pbsB);
 		
 		System.out.println("Result: "+result);	// result dies
 	}
 	
+
 	public String battleLoop(PlayerBattleState A, PlayerBattleState B) {
-		boolean battleOver = false;
 		int turnNum = 1;
 		
-		DrawBattle drawBattle = new DrawBattle(A, B);
+		drawBattle = new DrawBattle(this);
 		
 		while(!battleOver) {
 			
@@ -27,11 +34,18 @@ public class BattleLogic {
 			System.out.println("Turn "+turnNum+":");
 			turnNum++;
 			
+			drawBattle.setMoveChosen(false);
+			this.turnA = true;
+			drawBattle.repaint();
+			chooseMove(A);
+			drawBattle.setMoveChosen(false);
 			
-			
-			promptUser(A);
 			System.out.println(A.getName()+"'s current move: "+A.getCurrMove());
-			promptUser(B);
+			
+			this.turnA = false;
+			drawBattle.repaint();
+			chooseMove(B);
+			drawBattle.setMoveChosen(false);
 			System.out.println(B.getName()+"'s current Move: "+B.getCurrMove());
 			
 			System.out.println("----------------------------------------------");
@@ -42,29 +56,80 @@ public class BattleLogic {
 				tl.attack(A, B);
 				if(checkDeath(A, B)!=null)
 					return checkDeath(A, B);
+				drawBattle.repaint();
 				tl.attack(B, A);
 			} else {
 				tl.attack(B, A);
 				if(checkDeath(A, B)!=null)
 					return checkDeath(A, B);
+				drawBattle.repaint();
 				tl.attack(A, B);
 			}
-			
 			drawBattle.repaint();
+			if(checkDeath(A, B)!=null)
+				return checkDeath(A, B);
 			
 		}
-		return checkDeath(A, B);
+		return null;
 	}
 	
 	public String checkDeath(PlayerBattleState A, PlayerBattleState B) {
 		if(A.getCurrHealth()<=0 && B.getCurrHealth()<=0) {
+			this.battleOver = true;
+			this.deadPlayer = "TIE";
+			drawBattle.repaint();
 			return "TIE";
 		} else if(A.getCurrHealth()<=0) {
+			this.battleOver = true;
+			this.deadPlayer = "A";
+			drawBattle.repaint();
 			return "A";
 		} else if(B.getCurrHealth()<=0) {
+
+			this.battleOver = true;
+			this.deadPlayer = "B";
+			drawBattle.repaint();
 			return "B";
 		}
+		System.out.println("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN");
 		return null;
+	}
+	
+	public void chooseMove(PlayerBattleState player) {
+		while(true) {
+			String nextMove = drawBattle.getNextMove();
+			 if (drawBattle.isMoveChosen() && checkMoveValidity(player, nextMove)) {
+			     player.setCurrMove(nextMove);
+			     return;
+			 }
+			 try {
+					TimeUnit.MILLISECONDS.sleep(10);
+			 } catch (InterruptedException e) {
+					e.printStackTrace();
+			 }
+		}
+	}
+	
+	public boolean checkMoveValidity(PlayerBattleState player, String nextMove) {
+		boolean isValid = true;
+		
+		
+		if (nextMove == null)	// Add null check and handle "NONE" case
+	        return false;
+		
+		if(nextMove.equals("SWING") && player.getPlayer().getInventory().getActiveSword().getStaminaUsage() > player.getCurrStamina()) {
+        	isValid = false;
+        	System.out.println("Not enough stamina!");
+        } else if(nextMove.equals("JAB") && player.getPlayer().getInventory().getActiveSword().getStaminaUsage()/2 > player.getCurrStamina()) {
+        	isValid = false;
+        	System.out.println("Not enough stamina!");
+        } else if(nextMove.equals("BLOCK") && player.getBlockCounter()>2) {
+        	isValid = false;
+        	System.out.println("Can't block 3 times in a row!");
+        } else if(nextMove.equals("CHARGE") && player.getCurrCharge() == 1.75) {
+        	System.out.println("Already at max charge, attempts to charge anyways...");
+        }
+		return isValid;
 	}
 	
 	public void promptUser(PlayerBattleState player) {
@@ -96,5 +161,29 @@ public class BattleLogic {
 	public boolean isValidMove(String move) {
         return move.equals("SWING") || move.equals("JAB") || move.equals("BLOCK") || move.equals("CHARGE");
     }
+
+	public PlayerBattleState getPbsA() {
+		return this.pbsA;
+	}
+
+	public PlayerBattleState getPbsB() {
+		return this.pbsB;
+	}
+
+	public boolean isTurnA() {
+		return this.turnA;
+	}
+
+	public void setTurnA(boolean turnA) {
+		this.turnA = turnA;
+	}
 	
+	public boolean isBattleOver() {
+		return this.battleOver;
+	}
+	
+	public String getDeadPlayer() {
+		return this.deadPlayer;
+		
+	}
 }

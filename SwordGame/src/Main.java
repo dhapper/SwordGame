@@ -26,8 +26,8 @@ public class Main {
 		System.out.println(player.getInventory().getActiveShield().getName());
 		System.out.println(player.getInventory().getActiveArmour().getName());*/
 		
-		BattleLogic bl = new BattleLogic();
-		bl.battleManager(player, enemy);
+		BattleLogic bl = new BattleLogic(player, enemy);
+
 		
 	}
 

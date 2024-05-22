@@ -22,6 +22,7 @@ public class PlayerBattleState {
 		this.currKnowledge = player.getKnowledge();
 		this.currCharge = 1;
 		this.blockCounter = 0;
+		this.currMove = "NONE";
 		
 		this.currMove = null;
 		
@@ -144,7 +145,7 @@ public class PlayerBattleState {
 	public void increaseCurrCharge() {
 		if(this.currCharge == 1)
 			this.currCharge += 0.25;
-		else
+		else if (this.currCharge == 1.25)
 			this.currCharge += 0.75;
 	}
 

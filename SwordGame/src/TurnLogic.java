@@ -75,7 +75,7 @@ public class TurnLogic {
 		System.out.println("----------------------------------------------");
 		System.out.println(attacker.getCurrCharge());
 
-
+		attacker.setCurrMove("NONE");
 	}
 	
 	public PlayerBattleState speedComparison(PlayerBattleState A, PlayerBattleState B) {
