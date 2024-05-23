@@ -3,17 +3,28 @@ import java.awt.Graphics;
 
 public class DrawPlayerInfo {
 	
-	public DrawPlayerInfo(DrawBattle drawBattle, PlayerBattleState player, int x, int y, Graphics g) {
+	public DrawPlayerInfo(DrawBattle drawBattle, PlayerBattleState player, int x, Graphics g) {
 		
 		int bgW = drawBattle.getWidth()/4;
 		int bgH = drawBattle.getHeight()/4;
 		int xBgOffset = x + drawBattle.getWidth()/24;
-		int xStringOffset = x + drawBattle.getWidth()/24 + drawBattle.getWidth()/25;
+		
+		//------------------------------------------------
+		
+		//init x is given
+		
+		int X_min = x;
+		int X_max = x + drawBattle.getWidth()/4;
+		int Y_min = drawBattle.getHeight()/4;
+		int Y_max = drawBattle.getHeight()*3/4;
+		
+		int xStringOffset = X_min + drawBattle.getHeight()/30;
 		int yStringOffset = drawBattle.getHeight()/25;
-		int stringY = y + drawBattle.getHeight()/20;
+		int stringY = Y_min + drawBattle.getHeight()/20;
 		
 		g.setColor(new Color(0, 0, 0, 200));
-		g.fillRect(xBgOffset, y, bgW, bgH);
+		
+		g.fillRect(X_min, Y_min, X_max - X_min, (Y_max - Y_min)/2);
 		
 		g.setColor(new Color(200, 200, 0));
 		g.drawString("Health: "+player.getCurrHealth()+"/"+player.getMaxHealth(), xStringOffset, stringY);

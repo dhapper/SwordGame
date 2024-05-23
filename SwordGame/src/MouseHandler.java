@@ -17,15 +17,23 @@ public class MouseHandler implements MouseListener, MouseMotionListener{
 	
 	public void playerHovered(int x, int y) {
 		this.hovered = "NONE";
-		if(x >= drawBattle.getAx() && x <= drawBattle.getAw() + drawBattle.getAx()) {
-			if(y >= drawBattle.getAy() && y <= drawBattle.getAh() + drawBattle.getAy())
+		
+		int AX_min = 0;
+		int AX_max = drawBattle.getWidth()/4;
+		int Y_min = drawBattle.getHeight()/4;
+		int Y_max = drawBattle.getHeight()*3/4;
+		int BX_min = drawBattle.getWidth()*3/4;
+		int BX_max = drawBattle.getWidth();
+		
+		if(x >= AX_min && x <= AX_max) {
+			if(y >= Y_min && y <= Y_max)
 				this.hovered = "A";
-		}else if(x >= drawBattle.getBx() && x <= drawBattle.getAw() + drawBattle.getBx()) {
-			if(y >= drawBattle.getAy() && y <= drawBattle.getAh() + drawBattle.getAy())
+		}else if(x >= BX_min && x <= BX_max) {
+			if(y >= Y_min && y <= Y_max)
 				this.hovered = "B";
 		}
 		
-		drawBattle.repaint();
+		this.drawBattle.repaint();
 		
 	}
 

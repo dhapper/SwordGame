@@ -1,33 +1,58 @@
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-public class BattleLogic {
+import javax.swing.JFrame;
+
+public class BattleLogic implements Runnable{
 
 	PlayerBattleState pbsA;
 	PlayerBattleState pbsB;
-	DrawBattle drawBattle;
 	boolean turnA;
 	boolean battleOver;
 	String deadPlayer;
+	DrawBattle drawBattle;
 	
-	public BattleLogic(Player A, Player B) {
+	JFrame frame;
+	
+	private volatile boolean running = true;
+	
+	public BattleLogic(JFrame frame, Player A, Player B) {
 		this.battleOver = false;
 		this.pbsA = new PlayerBattleState(A);
 		this.pbsB = new PlayerBattleState(B);
+		this.frame = frame;
+		
+		//frame.getContentPane().removeAll();
+		//frame.revalidate();
+		//frame.repaint();
+		
+		new Thread(this).start();
+		
+		/*this.drawBattle = new DrawBattle(frame, this);
+		this.drawBattle.repaint();
+		System.out.println("init'd DrawBattle");
 		
 		String result = battleLoop(pbsA, pbsB);
+		drawBattle.repaint();
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		
 		System.out.println("Result: "+result);	// result dies
+		
+		DrawMenu drawMenu = new DrawMenu(frame);*/
 	}
 	
 
 	public String battleLoop(PlayerBattleState A, PlayerBattleState B) {
 		int turnNum = 1;
 		
-		drawBattle = new DrawBattle(this);
-		
 		while(!battleOver) {
 			
+			this.drawBattle = new DrawBattle(frame, this);
 			
 			System.out.println("**********************************************");
 			System.out.println("**********************************************");
@@ -97,7 +122,7 @@ public class BattleLogic {
 	
 	public void chooseMove(PlayerBattleState player) {
 		while(true) {
-			String nextMove = drawBattle.getNextMove();
+			String nextMove = this.drawBattle.getNextMove();
 			 if (drawBattle.isMoveChosen() && checkMoveValidity(player, nextMove)) {
 			     player.setCurrMove(nextMove);
 			     return;
@@ -184,6 +209,25 @@ public class BattleLogic {
 	
 	public String getDeadPlayer() {
 		return this.deadPlayer;
+		
+	}
+
+
+	@Override
+	public void run() {
+		String result = battleLoop(pbsA, pbsB);
+        drawBattle.repaint();
+
+        try {
+            TimeUnit.MILLISECONDS.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Result: " + result); // result dies
+
+        // Assuming DrawMenu is part of your GUI flow
+        DrawMenu drawMenu = new DrawMenu(this.frame);
 		
 	}
 }

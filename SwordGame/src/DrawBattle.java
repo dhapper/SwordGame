@@ -27,20 +27,30 @@ public class DrawBattle extends JPanel{
 	int buttonX1, buttonY1;
 	boolean buttonVisible;
 	JButton swingButton, jabButton, blockButton, chargeButton;
+	JFrame frame;
 	
-    public DrawBattle(BattleLogic battleLogic) {
-    	this.battleLogic = battleLogic;
-    	this.width = 600;
-    	this.height = 600;
-    	this.buttonVisible = true;
+    public DrawBattle(JFrame frame, BattleLogic battleLogic) {
+    	System.out.println("DrawBattle started...");
     	
+    	this.battleLogic = battleLogic;
+    	this.width = frame.getWidth();
+    	this.height = frame.getHeight();
+    	
+    	this.frame = frame;
+		this.frame.getContentPane().removeAll();
+		this.frame.revalidate();
+		this.frame.add(this);
+		this.frame.setVisible(true);
+		this.frame.repaint();
+		setLayout(null);
+    	
+    	//mouse = new MouseHandler(gui);
     	mouse = new MouseHandler(this);
     	addMouseListener(mouse);
     	addMouseMotionListener(mouse);
     	
-    	setLayout(null);
+   
     	
-    	JFrame frame = new JFrame();
     	
     	int buttonWidth = this.width/5;
     	int buttonHeight = buttonWidth/2;
@@ -119,21 +129,12 @@ public class DrawBattle extends JPanel{
     	
     	
     	
-    	frame.setTitle("frame title");
-    	frame.setSize(width+16, height);	// idk why +16
-    	frame.setVisible(true);
-    	frame.setResizable(false);
-    	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    	frame.setLocationRelativeTo(null);
-    	frame.add(this);
-    	
-    	setOpaque(false);
-    	
     }
     
     
     
     public void paintComponent(Graphics g){
+    	System.out.println("DrawBattle painted...");
     	super.paintComponent(g);
     	
     	int labelOffset = this.width/100;
@@ -170,11 +171,11 @@ public class DrawBattle extends JPanel{
     	int A_chargeStringY = chargeIconY + blockStringOffset;
     	int B_blockStringX = B_shieldIconX - shieldIconW + shieldIconOffset;
     	
-    	this.Aw = this.width/3;
+    	this.Aw = this.width*5/12;
     	this.Ah = this.Aw*6/5;
-    	this.Ax = (width/4-this.Aw/2)/2;
-    	this.Ay = this.height/2-this.Ah/2;
-    	this.Bx = this.width - this.Ax - this.Aw;
+    	this.Ax = -this.width/20;
+    	this.Ay = this.height/5;
+    	this.Bx = this.width - this.Ax;
     	
     	int shieldAX = this.Ax +  this.Aw/20;
     	int shieldAY = this.Ay + this.Ah*2/5;
@@ -256,57 +257,6 @@ public class DrawBattle extends JPanel{
 			e1.printStackTrace();
 		}
     	
-    	// draw players
-    	try {
-    		
-    		// player A
-    		Image playerA = ImageIO.read(new File("res/player.png"));
-    		AffineTransform transformPlayerA = new AffineTransform();
-    		transformPlayerA.translate(this.Ax, this.Ay);
-    		transformPlayerA.scale(this.Aw/playerA.getWidth(getFocusCycleRootAncestor()),
-    				this.Ah/playerA.getHeight(getFocusCycleRootAncestor()));
-    		g2d.drawImage(playerA, transformPlayerA, null);
-    		
-    		Image shieldA = ImageIO.read(new File("res/"+this.battleLogic.getPbsA().getPlayer().getInventory().getActiveShield().getName()+".png"));
-    		AffineTransform transformShieldA = new AffineTransform();
-    		transformShieldA.translate(shieldAX, shieldAY);
-    		transformShieldA.scale(shieldAW/shieldA.getWidth(getFocusCycleRootAncestor()),
-    				shieldAW/shieldA.getHeight(getFocusCycleRootAncestor()));
-    		g2d.drawImage(shieldA, transformShieldA , null);
-    		
-    		Image swordA = ImageIO.read(new File("res/"+this.battleLogic.getPbsA().getPlayer().getInventory().getActiveSword().getName()+".png"));
-			AffineTransform transform = new AffineTransform();
-			transform.translate(swordAX, swordAY);
-			transform.rotate(Math.toRadians(swordAngleA));
-			transform.scale(swordScaleA, swordScaleA);
-			g2d.drawImage(swordA, transform, null);
-    		
-			// player B
-			Image playerB = ImageIO.read(new File("res/player2.png"));
-			AffineTransform transformPlayerB = new AffineTransform();
-    		transformPlayerB.translate(this.Bx+this.Aw, this.Ay);
-    		transformPlayerB.scale(-this.Aw/playerB.getWidth(getFocusCycleRootAncestor()),
-    				this.Ah/playerB.getHeight(getFocusCycleRootAncestor()));
-    		g2d.drawImage(playerB, transformPlayerB, null);
-			
-    		Image shieldB = ImageIO.read(new File("res/"+this.battleLogic.getPbsB().getPlayer().getInventory().getActiveShield().getName()+".png"));
-    		AffineTransform transformShieldB = new AffineTransform();
-    		transformShieldB.translate(shieldBX+this.Aw, shieldAY);
-    		transformShieldB.scale(-shieldAW/shieldB.getWidth(getFocusCycleRootAncestor()),
-    				shieldAW/shieldB.getHeight(getFocusCycleRootAncestor()));
-    		g2d.drawImage(shieldB, transformShieldB, null);
-    		
-    		Image swordB = ImageIO.read(new File("res/"+this.battleLogic.getPbsB().getPlayer().getInventory().getActiveSword().getName()+".png"));
-			AffineTransform transformSwordB = new AffineTransform();
-			transformSwordB.translate(swordBX, swordAY);
-			transformSwordB.rotate(Math.toRadians(-swordAngleA));
-			transformSwordB.scale(-swordScaleA, swordScaleA);
-			g2d.drawImage(swordB, transformSwordB, null);
-    		
-    	} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
     	
     	// A
     	// health bar
@@ -357,17 +307,105 @@ public class DrawBattle extends JPanel{
     		g.drawString("Pick "+battleLogic.getPbsB().getName()+"'s move", startX, this.buttonY1 - this.height/60);
     	}
     	
+    	
+    	// test new player model
+    	int playerAX = 100;
+    	int playerAY = 100;
+    	int playerAW = 300;
+    	int playerAH = 300;
+    	g.setColor(Color.BLACK);
+    	//g.fillRect(this.Ax, this.Ay, this.Aw, this.Ah);
+    
+    	try {
+    		
+    		int shield_AX = Ax + Aw/4 - Aw/12;
+    		int shield_AY = Ay + Ah/3 + Ah/8;
+    		int shield_AW = Aw/3;
+    		int shield_AH = Ah/3;
+    		int shield_BX = width - shield_AX;
+    		
+    		int sword_AX = Ax + Aw - width/50;		//micro adjustments not relative to size
+    		int sword_AY = Ay - height/200;
+    		int sword_AW = Aw*5/8;
+    		int sword_AH = Ah*5/8;
+    		int sword_BX = width - sword_AX;
+    		int swordAngle = 40;
+    		
+    		// player A
+    		Image playerModelA = ImageIO.read(new File("res/player - default.png"));
+    		AffineTransform transformPlayerModelA = new AffineTransform();
+    		transformPlayerModelA.translate(this.Ax, this.Ay);
+    		transformPlayerModelA.scale(this.Aw/playerModelA.getWidth(getFocusCycleRootAncestor()), this.Ah/playerModelA.getHeight(getFocusCycleRootAncestor()));
+    		g2d.drawImage(playerModelA, transformPlayerModelA, null);
+    		
+    		Image armourModelA = ImageIO.read(new File("res/armour - default.png"));
+    		AffineTransform transformArmourModelA = new AffineTransform();
+    		transformArmourModelA.translate(this.Ax, this.Ay);
+    		transformArmourModelA.scale(this.Aw/playerModelA.getWidth(getFocusCycleRootAncestor()), this.Ah/playerModelA.getHeight(getFocusCycleRootAncestor()));
+    		g2d.drawImage(armourModelA, transformArmourModelA, null);
+    		
+    		Image shieldModelA = ImageIO.read(new File("res/pillow.png"));
+    		AffineTransform transformShieldModelA = new AffineTransform();
+    		transformShieldModelA.translate(shield_AX, shield_AY);
+    		transformShieldModelA.scale(shield_AW/shieldModelA.getWidth(getFocusCycleRootAncestor()), shield_AH/shieldModelA.getHeight(getFocusCycleRootAncestor()));
+    		g2d.drawImage(shieldModelA, transformShieldModelA, null);
+    		
+    		Image swordModelA = ImageIO.read(new File("res/twig.png"));
+    		AffineTransform transformSwordModelA = new AffineTransform();
+    		transformSwordModelA.translate(sword_AX, sword_AY);
+    		transformSwordModelA.scale(sword_AW/swordModelA.getWidth(getFocusCycleRootAncestor()), sword_AH/swordModelA.getHeight(getFocusCycleRootAncestor()));
+    		transformSwordModelA.rotate(Math.toRadians(40));
+    		g2d.drawImage(swordModelA, transformSwordModelA, null);
+    		
+    		// player B
+    		// using lots of a variables
+    		Image playerModelB = ImageIO.read(new File("res/player - default.png"));
+    		AffineTransform transformPlayerModelB = new AffineTransform();
+    		transformPlayerModelB.translate(this.Bx, this.Ay);
+    		transformPlayerModelB.scale(-this.Aw/playerModelA.getWidth(getFocusCycleRootAncestor()), this.Ah/playerModelA.getHeight(getFocusCycleRootAncestor()));
+    		g2d.drawImage(playerModelB, transformPlayerModelB, null);
+    		
+    		Image armourModelB = ImageIO.read(new File("res/armour - default.png"));
+    		AffineTransform transformArmourModelB = new AffineTransform();
+    		transformArmourModelB.translate(this.Bx, this.Ay);
+    		transformArmourModelB.scale(-this.Aw/armourModelB.getWidth(getFocusCycleRootAncestor()), this.Ah/armourModelB.getHeight(getFocusCycleRootAncestor()));
+    		g2d.drawImage(armourModelB, transformArmourModelB, null);
+    		
+    		Image shieldModelB = ImageIO.read(new File("res/cardboard.png"));
+    		AffineTransform transformShieldModelB = new AffineTransform();
+    		transformShieldModelB.translate(shield_BX, shield_AY);
+    		transformShieldModelB.scale(-shield_AW/shieldModelB.getWidth(getFocusCycleRootAncestor()), shield_AH/shieldModelB.getHeight(getFocusCycleRootAncestor()));
+    		g2d.drawImage(shieldModelB, transformShieldModelB, null);
+    		
+    		Image swordModelB = ImageIO.read(new File("res/sharp stick.png"));
+    		AffineTransform transformSwordModelB = new AffineTransform();
+    		transformSwordModelB.translate(sword_BX, sword_AY);
+    		transformSwordModelB.scale(-sword_AW/swordModelB.getWidth(getFocusCycleRootAncestor()), sword_AH/swordModelB.getHeight(getFocusCycleRootAncestor()));
+    		transformSwordModelB.rotate(Math.toRadians(40));
+    		g2d.drawImage(swordModelB, transformSwordModelB, null);
+    		
+	    } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+    	
+    	
+    	// player info panel
     	if(!battleLogic.isBattleOver() && mouse.getHovered().equals("A")) {
-    		DrawPlayerInfo info = new DrawPlayerInfo(this, battleLogic.getPbsA(), this.Ax, this.Ay, g);
+    		DrawPlayerInfo info = new DrawPlayerInfo(this, battleLogic.getPbsA(), 0, g);
     	}else if(!battleLogic.isBattleOver() && mouse.getHovered() == "B") {
-    		DrawPlayerInfo info = new DrawPlayerInfo(this, battleLogic.getPbsB(), this.Bx, this.Ay, g);
+    		DrawPlayerInfo info = new DrawPlayerInfo(this, battleLogic.getPbsB(), width*3/4, g);
     	}
     	
+    	
     	if(battleLogic.isBattleOver()) {
+    		
     		swingButton.setVisible(false);
         	jabButton.setVisible(false);
         	blockButton.setVisible(false);
         	chargeButton.setVisible(false);
+        	
         	g.setColor(new Color(0, 0, 0, 150));
     		g.fillRect(0, 0, this.width, this.height);
     		
@@ -382,18 +420,29 @@ public class DrawBattle extends JPanel{
 	    			Image label = ImageIO.read(new File("res/you win label.png"));
 	    			g.drawImage(label, this.width/6, this.height/6, this.width*2/3, this.height*2/3, getFocusCycleRootAncestor());
 	    		}
+				
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+    		
 			
-			// wait 3 seconds
+    		//launch menu in battle Logi
+    		
+			//frame.remove(this);
+
     		
     		// update stuff
     		
     		// return to menu
     		
     	}
+    	
     }
     
 	public BattleLogic getBattleLogic() {
