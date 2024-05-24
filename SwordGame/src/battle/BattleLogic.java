@@ -1,7 +1,13 @@
+package battle;
+
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFrame;
+
+import entity.*;
+import main.*;
+
 
 public class BattleLogic implements Runnable{
 

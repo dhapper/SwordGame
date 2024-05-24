@@ -1,4 +1,7 @@
+package entity;
 import java.util.ArrayList;
+
+import main.UseMongoDB;
 
 public class Inventory {
 

@@ -1,3 +1,4 @@
+package entity;
 
 public class Sword {
 
@@ -13,11 +14,11 @@ public class Sword {
 		System.out.println(name+"\n"+damage+"\n"+weight+"\n"+piercing+"\n"+durability+"\n"+staminaUsage);
 	}
 	
-	protected int getStaminaUsage() {
+	public int getStaminaUsage() {
 		return staminaUsage;
 	}
 
-	protected void setStaminaUsage(int staminaUsage) {
+	public void setStaminaUsage(int staminaUsage) {
 		this.staminaUsage = staminaUsage;
 	}
 

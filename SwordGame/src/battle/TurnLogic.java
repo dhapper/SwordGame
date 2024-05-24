@@ -1,3 +1,4 @@
+package battle;
 import java.util.Random;
 
 public class TurnLogic {
@@ -62,7 +63,7 @@ public class TurnLogic {
 			attacker.setBlockCounter(0);
 		} else if(attacker.getCurrMove().equals("BLOCK")) {
 			attacker.addToCurrStamina(attacker.getPlayer().getInventory().getActiveShield().getStaminaRegain());
-			attacker.increaseBlockCounter();
+			attacker.setBlockCounter(attacker.getBlockCounter()+1);
 		} else if(attacker.getCurrMove().equals("CHARGE")) {
 			attacker.increaseCurrCharge();
 			attacker.setBlockCounter(0);

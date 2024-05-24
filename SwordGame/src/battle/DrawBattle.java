@@ -1,8 +1,12 @@
-import javax.imageio.ImageIO;
+package battle;
+import javax.imageio.ImageIO; 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;  
 import javax.swing.JPanel;
+
+import main.*;
+
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -142,7 +146,7 @@ public class DrawBattle extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
             	moveChosen = true;
-            	setNextMove("CHARGE");
+            	setNextMove("SWAP_SWORDS");
             }
         });
     	

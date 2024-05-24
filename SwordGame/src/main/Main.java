@@ -1,3 +1,6 @@
+package main;
+import battle.BattleLogic;
+import entity.Player;
 
 public class Main {
 

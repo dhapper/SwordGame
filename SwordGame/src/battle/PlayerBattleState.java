@@ -1,3 +1,6 @@
+package battle;
+import entity.Player;
+import entity.Sword;
 
 public class PlayerBattleState {
 
@@ -60,80 +63,99 @@ public class PlayerBattleState {
 		maxInactiveSwordDurability = tempMaxDur;
 	}
 
-	protected boolean isFaster() {
-		return faster;
-	}
-
-	protected void setFaster(boolean faster) {
-		this.faster = faster;
-	}
-
-	protected String getName() {
-		return name;
-	}
-
-	protected void setName(String name) {
-		this.name = name;
-	}
-
-	protected int getCurrHealth() {
-		return currHealth;
-	}
-
-	protected void setCurrHealth(int currHealth) {
-		this.currHealth = currHealth;
-	}
-
-	protected int getCurrStrength() {
-		return currStrength;
-	}
-
-	protected void setCurrStrength(int currStrength) {
-		this.currStrength = currStrength;
-	}
-
-	protected int getCurrSpeed() {
-		return currSpeed;
-	}
-
-	protected void setCurrSpeed(int currSpeed) {
-		this.currSpeed = currSpeed;
-	}
-
-	protected int getCurrStamina() {
-		return currStamina;
-	}
-
-	protected void setCurrStamina(int currStamina) {
-		this.currStamina = currStamina;
-	}
-
-	protected int getCurrKnowledge() {
-		return currKnowledge;
-	}
-
-	protected void setCurrKnowledge(int currKnowledge) {
-		this.currKnowledge = currKnowledge;
-	}
-
-	protected Player getPlayer() {
-		return player;
-	}
-
-	protected void setPlayer(Player player) {
-		this.player = player;
-	}
-
-	protected String getCurrMove() {
-		return currMove;
-	}
-
-	protected void setCurrMove(String currMove) {
-		this.currMove = currMove;
-	}
+	
 
 	public void addToCurrStamina(int stamina) {
 		this.currStamina += stamina;
+	}
+	
+	
+	public void increaseCurrCharge() {
+		if(this.currCharge == 1)
+			this.currCharge += 0.5;
+		else if (this.currCharge == 1.5)
+			this.currCharge += 2;
+	}
+
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getCurrHealth() {
+		return currHealth;
+	}
+
+	public void setCurrHealth(int currHealth) {
+		this.currHealth = currHealth;
+	}
+
+	public int getCurrStrength() {
+		return currStrength;
+	}
+
+	public void setCurrStrength(int currStrength) {
+		this.currStrength = currStrength;
+	}
+
+	public int getCurrSpeed() {
+		return currSpeed;
+	}
+
+	public void setCurrSpeed(int currSpeed) {
+		this.currSpeed = currSpeed;
+	}
+
+	public int getCurrStamina() {
+		return currStamina;
+	}
+
+	public void setCurrStamina(int currStamina) {
+		this.currStamina = currStamina;
+	}
+
+	public int getCurrKnowledge() {
+		return currKnowledge;
+	}
+
+	public void setCurrKnowledge(int currKnowledge) {
+		this.currKnowledge = currKnowledge;
+	}
+
+	public double getCurrCharge() {
+		return currCharge;
+	}
+
+	public void setCurrCharge(double currCharge) {
+		this.currCharge = currCharge;
+	}
+
+	public Player getPlayer() {
+		return player;
+	}
+
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
+
+	public String getCurrMove() {
+		return currMove;
+	}
+
+	public void setCurrMove(String currMove) {
+		this.currMove = currMove;
+	}
+
+	public boolean isFaster() {
+		return faster;
+	}
+
+	public void setFaster(boolean faster) {
+		this.faster = faster;
 	}
 
 	public int getMaxHealth() {
@@ -144,14 +166,6 @@ public class PlayerBattleState {
 		this.maxHealth = maxHealth;
 	}
 
-	public int getSwordChoice() {
-		return swordChoice;
-	}
-
-	public void setSwordChoice(int swordChoice) {
-		this.swordChoice = swordChoice;
-	}
-
 	public int getMaxStamina() {
 		return maxStamina;
 	}
@@ -160,31 +174,12 @@ public class PlayerBattleState {
 		this.maxStamina = maxStamina;
 	}
 
-	public double getCurrCharge() {
-		return currCharge;
-	}
-
-	public void setCurrCharge(double currCharge) {
-		this.currCharge = currCharge;
-	}
-		
-	public void increaseCurrCharge() {
-		if(this.currCharge == 1)
-			this.currCharge += 0.5;
-		else if (this.currCharge == 1.5)
-			this.currCharge += 2;
-	}
-
 	public int getBlockCounter() {
 		return blockCounter;
 	}
 
 	public void setBlockCounter(int blockCounter) {
 		this.blockCounter = blockCounter;
-	}
-	
-	public void increaseBlockCounter() {
-		this.blockCounter++;
 	}
 
 	public int getActiveSwordDurability() {
@@ -250,7 +245,15 @@ public class PlayerBattleState {
 	public void setInactiveSword(Sword inactiveSword) {
 		this.inactiveSword = inactiveSword;
 	}
-	
+
+	public int getSwordChoice() {
+		return swordChoice;
+	}
+
+	public void setSwordChoice(int swordChoice) {
+		this.swordChoice = swordChoice;
+	}
+
 	
 	
 }

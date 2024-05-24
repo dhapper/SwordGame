@@ -1,3 +1,4 @@
+package entity;
 
 public class Shield {
 	private String name;

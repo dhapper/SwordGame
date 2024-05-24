@@ -1,3 +1,4 @@
+package main;
 import java.awt.Color; 
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -7,6 +8,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import battle.BattleLogic;
+import entity.Player;
 
 public class DrawMenu extends JPanel{
 	

@@ -1,9 +1,13 @@
+package main;
 import java.awt.Color;
 import java.awt.Graphics;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import battle.BattleLogic;
+import entity.Player;
 
 public class MainFrame extends JFrame{
 

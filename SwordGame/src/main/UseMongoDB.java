@@ -1,3 +1,4 @@
+package main;
 import org.bson.Document; 
 import org.bson.conversions.Bson;
 
@@ -5,6 +6,11 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+
+import entity.Armour;
+import entity.Player;
+import entity.Shield;
+import entity.Sword;
 
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Updates.push;
