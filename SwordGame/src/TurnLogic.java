@@ -4,8 +4,11 @@ public class TurnLogic {
 	
 	public void attack(PlayerBattleState attacker, PlayerBattleState defender) {
 		
+		//if(attacker.getActiveSwordDurability() != 0)
+		
 		if(!attacker.getCurrMove().equals("BLOCK") && !attacker.getCurrMove().equals("CHARGE")) {
 			
+		
 			Random random = new Random();
 	        double randomMultiplier = 0.9 + (random.nextDouble() * 0.2);
 			double baseAttack = (attacker.getCurrStrength() * attacker.getPlayer().getInventory().getActiveSword().getDamage() /10.0)
@@ -61,9 +64,8 @@ public class TurnLogic {
 			attacker.addToCurrStamina(attacker.getPlayer().getInventory().getActiveShield().getStaminaRegain());
 			attacker.increaseBlockCounter();
 		} else if(attacker.getCurrMove().equals("CHARGE")) {
-			//if(!(attacker.getCurrCharge() == 1.75)) {
-				attacker.increaseCurrCharge();
-			//}
+			attacker.increaseCurrCharge();
+			attacker.setBlockCounter(0);
 			attacker.addToCurrStamina(attacker.getPlayer().getInventory().getActiveSword().getStaminaUsage()/2);
 		}
 		
@@ -74,7 +76,13 @@ public class TurnLogic {
 		System.out.println(attacker.getName()+"'s stamina after: "+attacker.getCurrStamina());
 		System.out.println("----------------------------------------------");
 		System.out.println(attacker.getCurrCharge());
-
+		
+		// durability calcs
+		if(attacker.getCurrMove().equals("BLOCK") && attacker.isFaster() && (defender.getCurrMove().equals("SWING") || defender.getCurrMove().equals("JAB")))
+			attacker.setActiveShieldDurability(attacker.getActiveShieldDurability()-1);
+		else if(attacker.getCurrMove().equals("SWING") || attacker.getCurrMove().equals("JAB"))
+			attacker.setActiveSwordDurability(attacker.getActiveSwordDurability()-1);
+		
 		attacker.setCurrMove("NONE");
 	}
 	

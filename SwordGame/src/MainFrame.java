@@ -10,7 +10,8 @@ public class MainFrame extends JFrame{
 	
 	public MainFrame() {
 	
-		int width = 600, height= 600;
+		
+		int height = 600, width = height*3/2;
 		
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
@@ -22,7 +23,7 @@ public class MainFrame extends JFrame{
 		
     	setVisible(true);
     	setTitle("MainFrame");
-    	setSize(width+16, height);	// idk why +16
+    	setSize(width+16, height+39);	// idk why +16 and +39
     	setVisible(true);
     	setResizable(true);
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

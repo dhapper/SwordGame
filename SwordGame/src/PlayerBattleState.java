@@ -9,6 +9,8 @@ public class PlayerBattleState {
 	private boolean faster;
 	private int maxHealth, maxStamina;
 	private int blockCounter;
+	private int activeSwordDurability, maxActiveSwordDurability, inactiveSwordDurability, maxInactiveSwordDurability;
+	private int activeShieldDurability, maxActiveShieldDurability;
 	
 	private int swordChoice;
 	
@@ -22,6 +24,13 @@ public class PlayerBattleState {
 		this.currKnowledge = player.getKnowledge();
 		this.currCharge = 1;
 		this.blockCounter = 0;
+		this.activeSwordDurability = player.getInventory().getActiveSword().getDurability();
+		this.maxActiveSwordDurability = this.activeSwordDurability;
+		this.inactiveSwordDurability = player.getInventory().getInactiveSword().getDurability();
+		this.maxInactiveSwordDurability = this.inactiveSwordDurability;
+		this.activeShieldDurability = player.getInventory().getActiveShield().getDurability();
+		this.maxActiveShieldDurability = this.activeShieldDurability;
+		
 		this.currMove = "NONE";
 		
 		this.currMove = null;
@@ -144,9 +153,9 @@ public class PlayerBattleState {
 		
 	public void increaseCurrCharge() {
 		if(this.currCharge == 1)
-			this.currCharge += 0.25;
-		else if (this.currCharge == 1.25)
-			this.currCharge += 0.75;
+			this.currCharge += 0.5;
+		else if (this.currCharge == 1.5)
+			this.currCharge += 2;
 	}
 
 	public int getBlockCounter() {
@@ -160,5 +169,55 @@ public class PlayerBattleState {
 	public void increaseBlockCounter() {
 		this.blockCounter++;
 	}
+
+	public int getActiveSwordDurability() {
+		return activeSwordDurability;
+	}
+
+	public void setActiveSwordDurability(int activeSwordDurability) {
+		this.activeSwordDurability = activeSwordDurability;
+	}
+
+	public int getMaxActiveSwordDurability() {
+		return maxActiveSwordDurability;
+	}
+
+	public void setMaxActiveSwordDurability(int maxActiveSwordDurability) {
+		this.maxActiveSwordDurability = maxActiveSwordDurability;
+	}
+
+	public int getInactiveSwordDurability() {
+		return inactiveSwordDurability;
+	}
+
+	public void setInactiveSwordDurability(int inactiveSwordDurability) {
+		this.inactiveSwordDurability = inactiveSwordDurability;
+	}
+
+	public int getMaxInactiveSwordDurability() {
+		return maxInactiveSwordDurability;
+	}
+
+	public void setMaxInactiveSwordDurability(int maxInactiveSwordDurability) {
+		this.maxInactiveSwordDurability = maxInactiveSwordDurability;
+	}
+
+	public int getActiveShieldDurability() {
+		return activeShieldDurability;
+	}
+
+	public void setActiveShieldDurability(int activeShieldDurability) {
+		this.activeShieldDurability = activeShieldDurability;
+	}
+
+	public int getMaxActiveShieldDurability() {
+		return maxActiveShieldDurability;
+	}
+
+	public void setMaxActiveShieldDurability(int maxActiveShieldDurability) {
+		this.maxActiveShieldDurability = maxActiveShieldDurability;
+	}
+	
+	
 	
 }

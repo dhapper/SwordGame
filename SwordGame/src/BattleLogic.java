@@ -14,7 +14,8 @@ public class BattleLogic implements Runnable{
 	
 	JFrame frame;
 	
-	private volatile boolean running = true;
+	String invalidMoveString;
+	//private volatile boolean running = true;
 	
 	public BattleLogic(JFrame frame, Player A, Player B) {
 		this.battleOver = false;
@@ -22,28 +23,7 @@ public class BattleLogic implements Runnable{
 		this.pbsB = new PlayerBattleState(B);
 		this.frame = frame;
 		
-		//frame.getContentPane().removeAll();
-		//frame.revalidate();
-		//frame.repaint();
-		
 		new Thread(this).start();
-		
-		/*this.drawBattle = new DrawBattle(frame, this);
-		this.drawBattle.repaint();
-		System.out.println("init'd DrawBattle");
-		
-		String result = battleLoop(pbsA, pbsB);
-		drawBattle.repaint();
-		
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-		System.out.println("Result: "+result);	// result dies
-		
-		DrawMenu drawMenu = new DrawMenu(frame);*/
 	}
 	
 
@@ -54,7 +34,6 @@ public class BattleLogic implements Runnable{
 			
 			this.drawBattle = new DrawBattle(frame, this);
 			
-			System.out.println("**********************************************");
 			System.out.println("**********************************************");
 			System.out.println("Turn "+turnNum+":");
 			turnNum++;
@@ -116,17 +95,20 @@ public class BattleLogic implements Runnable{
 			drawBattle.repaint();
 			return "B";
 		}
-		System.out.println("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN");
 		return null;
 	}
 	
 	public void chooseMove(PlayerBattleState player) {
+		
+		invalidMoveString = "NONE";
 		while(true) {
+			
 			String nextMove = this.drawBattle.getNextMove();
 			 if (drawBattle.isMoveChosen() && checkMoveValidity(player, nextMove)) {
 			     player.setCurrMove(nextMove);
 			     return;
 			 }
+			 drawBattle.repaint();
 			 try {
 					TimeUnit.MILLISECONDS.sleep(10);
 			 } catch (InterruptedException e) {
@@ -138,21 +120,21 @@ public class BattleLogic implements Runnable{
 	public boolean checkMoveValidity(PlayerBattleState player, String nextMove) {
 		boolean isValid = true;
 		
-		
 		if (nextMove == null)	// Add null check and handle "NONE" case
 	        return false;
-		
+		invalidMoveString = "NONE";
 		if(nextMove.equals("SWING") && player.getPlayer().getInventory().getActiveSword().getStaminaUsage() > player.getCurrStamina()) {
         	isValid = false;
-        	System.out.println("Not enough stamina!");
+        	invalidMoveString = "NOT ENOUGH STAMINA";
         } else if(nextMove.equals("JAB") && player.getPlayer().getInventory().getActiveSword().getStaminaUsage()/2 > player.getCurrStamina()) {
         	isValid = false;
-        	System.out.println("Not enough stamina!");
+        	invalidMoveString = "NOT ENOUGH STAMINA";
         } else if(nextMove.equals("BLOCK") && player.getBlockCounter()>2) {
         	isValid = false;
-        	System.out.println("Can't block 3 times in a row!");
-        } else if(nextMove.equals("CHARGE") && player.getCurrCharge() == 1.75) {
-        	System.out.println("Already at max charge, attempts to charge anyways...");
+        	invalidMoveString = "CAN'T BLOCK 4 TIMES IN A ROW";
+        } else if(nextMove.equals("CHARGE") && player.getCurrCharge() == 3.5) {
+        	isValid = false;
+        	invalidMoveString = "CHARGE MULTIPLIER ALREADY AT MAX";
         }
 		return isValid;
 	}
@@ -199,8 +181,8 @@ public class BattleLogic implements Runnable{
 		return this.turnA;
 	}
 
-	public void setTurnA(boolean turnA) {
-		this.turnA = turnA;
+	public String getInvalidMoveString() {
+		return this.invalidMoveString;
 	}
 	
 	public boolean isBattleOver() {
@@ -215,19 +197,20 @@ public class BattleLogic implements Runnable{
 
 	@Override
 	public void run() {
+		
+		this.invalidMoveString = "NONE";
 		String result = battleLoop(pbsA, pbsB);
-        drawBattle.repaint();
-
+        
+		drawBattle.repaint();
+		
         try {
-            TimeUnit.MILLISECONDS.sleep(1000);
+            TimeUnit.MILLISECONDS.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         System.out.println("Result: " + result); // result dies
 
-        // Assuming DrawMenu is part of your GUI flow
         DrawMenu drawMenu = new DrawMenu(this.frame);
-		
 	}
 }

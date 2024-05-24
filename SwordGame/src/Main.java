@@ -15,7 +15,7 @@ public class Main {
 		
 		MainFrame mf = new MainFrame();
 		//DrawMenu dm = new DrawMenu();
-		//BattleLogic bl = new BattleLogic(player, enemy);
+		BattleLogic bl = new BattleLogic(mf, player, enemy);
 		
 	}
 

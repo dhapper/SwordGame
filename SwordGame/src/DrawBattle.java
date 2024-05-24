@@ -23,18 +23,17 @@ public class DrawBattle extends JPanel{
 	MouseHandler mouse;
 	String nextMove;
 	boolean moveChosen = false;
-	int Ax, Ay, Aw, Ah, Bx;
+	int playerX_A, playerY, playerW, playerH, playerX_B;
 	int buttonX1, buttonY1;
 	boolean buttonVisible;
 	JButton swingButton, jabButton, blockButton, chargeButton;
 	JFrame frame;
 	
     public DrawBattle(JFrame frame, BattleLogic battleLogic) {
-    	System.out.println("DrawBattle started...");
     	
     	this.battleLogic = battleLogic;
-    	this.width = frame.getWidth();
-    	this.height = frame.getHeight();
+    	this.width = frame.getWidth()-16;
+    	this.height = frame.getHeight()-39;
     	
     	this.frame = frame;
 		this.frame.getContentPane().removeAll();
@@ -44,21 +43,16 @@ public class DrawBattle extends JPanel{
 		this.frame.repaint();
 		setLayout(null);
     	
-    	//mouse = new MouseHandler(gui);
-    	mouse = new MouseHandler(this);
-    	addMouseListener(mouse);
-    	addMouseMotionListener(mouse);
+    	this.mouse = new MouseHandler(this);
+    	addMouseListener(this.mouse);
+    	addMouseMotionListener(this.mouse);
     	
-   
-    	
-    	
-    	int buttonWidth = this.width/5;
+    	int buttonWidth = this.width/6;
     	int buttonHeight = buttonWidth/2;
     	this.buttonX1 = this.width/2 - buttonWidth;
     	int buttonX2 = this.width/2;
     	this.buttonY1 = this.height*17/24;
     	int buttonY2 = buttonY1 + buttonHeight;
-    	
     	
     	this.swingButton = new JButton();
     	this.jabButton = new JButton();
@@ -67,25 +61,25 @@ public class DrawBattle extends JPanel{
     	try {
 	    	swingButton.setBounds(buttonX1, buttonY1, buttonWidth, buttonHeight);
 	    	add(swingButton);
-	    	Image swingButtonImage = ImageIO.read(new File("res/swing button icon.png"));
+	    	Image swingButtonImage = ImageIO.read(new File("res/button - swing.png"));
 			ImageIcon swingButtonIcon = new ImageIcon(swingButtonImage.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH));
 	    	swingButton.setIcon(swingButtonIcon);
 	    	
 	    	jabButton.setBounds(buttonX1, buttonY2, buttonWidth, buttonHeight);
 	    	add(jabButton);
-	    	Image jabButtonImage = ImageIO.read(new File("res/jab button icon.png"));
+	    	Image jabButtonImage = ImageIO.read(new File("res/button - jab.png"));
 			ImageIcon jabButtonIcon = new ImageIcon(jabButtonImage.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH));
 			jabButton.setIcon(jabButtonIcon);
 	    	
 			blockButton.setBounds(buttonX2, buttonY1, buttonWidth, buttonHeight);
 	    	add(blockButton);
-	    	Image blockButtonImage = ImageIO.read(new File("res/block button icon.png"));
+	    	Image blockButtonImage = ImageIO.read(new File("res/button - block.png"));
 			ImageIcon blockButtonIcon = new ImageIcon(blockButtonImage.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH));
 			blockButton.setIcon(blockButtonIcon);
 	    	
 	    	chargeButton.setBounds(buttonX2, buttonY2, buttonWidth, buttonHeight);
 	    	add(chargeButton);
-	    	Image chargeButtonImage = ImageIO.read(new File("res/charge button icon.png"));
+	    	Image chargeButtonImage = ImageIO.read(new File("res/button - charge.png"));
 			ImageIcon chargeButtonIcon = new ImageIcon(chargeButtonImage.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH));
 			chargeButton.setIcon(chargeButtonIcon);
 	    	
@@ -127,278 +121,235 @@ public class DrawBattle extends JPanel{
             }
         });
     	
-    	
-    	
     }
     
     
     
     public void paintComponent(Graphics g){
-    	System.out.println("DrawBattle painted...");
     	super.paintComponent(g);
     	
-    	int labelOffset = this.width/100;
-    	g.setColor(Color.red);
-    	Font labelFont = new Font("SansSerif", Font.BOLD, 14);
-    	g.setFont(labelFont);
-    	
-    	
-    	int healthBarOffset = this.width/2;
     	int healthBarW = this.width/3; 
-    	int healthBarH = this.width/20; 
-    	int A_healthBarX = healthBarOffset - healthBarW;
-    	int B_healthBarX = healthBarOffset;
+    	int healthBarH = this.height/20; 
+    	int healthBarX_A = this.width/2 - healthBarW;
+    	int healthBarX_B = healthBarX_A + healthBarW;
     	int healthBarY = this.height/100;
+    	int healthBarRed = 0;
+    	int healthBarGreen = 150;
+    	int healthBarBlue = 0;
     	
-    	int stamBarOffset = healthBarOffset;
     	int stamBarW = healthBarW*3/4;
     	int stamBarH = healthBarH/2;
-    	int A_stamBarX = stamBarOffset - stamBarW;
-    	int B_stamBarX = stamBarOffset;
-    	int stamBarY = healthBarY + this.height/20;
-    	
-    	int shieldIconOffset = this.width/100;
-    	int shieldIconW = this.width/20;
-    	int shieldIconH = shieldIconW;
-    	int A_shieldIconX = shieldIconOffset;
-    	int B_shieldIconX = this.width - shieldIconW - shieldIconOffset;
-    	int shieldIconY = this.height/100;
-    	int chargeIconY = 2*shieldIconY + shieldIconH;
-    	
-    	int blockStringOffset = this.height/27;
-    	int A_blockStringX = A_shieldIconX + shieldIconW + shieldIconOffset;	// dont get this fully
-    	int A_blockStringY = shieldIconY + blockStringOffset;
-    	int A_chargeStringY = chargeIconY + blockStringOffset;
-    	int B_blockStringX = B_shieldIconX - shieldIconW + shieldIconOffset;
-    	
-    	this.Aw = this.width*5/12;
-    	this.Ah = this.Aw*6/5;
-    	this.Ax = -this.width/20;
-    	this.Ay = this.height/5;
-    	this.Bx = this.width - this.Ax;
-    	
-    	int shieldAX = this.Ax +  this.Aw/20;
-    	int shieldAY = this.Ay + this.Ah*2/5;
-    	int shieldAW = this.Aw/2;
-    	int shieldAH = this.Aw/2;
-    	int shieldBX = this.Bx - this.Aw/20;
-    	int shieldAScale = 3; 
-    	
-    	int swordAX = this.Ax + this.Aw - this.width/25;
-    	int swordAY = this.Ay - this.Ah/5;
-    	int swordAngleA = 10;
-    	int swordScaleA = 5;
-    	int swordBX = this.Bx + this.width/25;
-    	
-    	
-    	// set bg
-    	try {
-			Image img = ImageIO.read(new File("res/bg.png"));
-			g.drawImage(img, 0, 0, this.width, this.height, getFocusCycleRootAncestor());
-			g.setColor(new Color(255, 255, 255, 50))
-;			g.fillRect(0, 0, this.width, this.height);
-    	} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	
-    	int healthBarGreen = 150;
+    	int stamBarX_A = this.width/2 - stamBarW;
+    	int stamBarX_B = stamBarX_A + stamBarW;
+    	int stamBarY = healthBarY + healthBarH;
     	int stamBarRed = 100;
     	int stamBarGreen = 100;
     	int stamBarBlue = 200;
     	
-    	Graphics2D g2d = (Graphics2D) g;
+    	int shieldIconOffset = this.width/100;
+    	int shieldIconW = this.width/20;
+    	int shieldIconH = shieldIconW;
+    	int shieldIconX_A = shieldIconOffset;
+    	int shieldIconX_B = this.width - shieldIconW - shieldIconOffset;
+    	int shieldIconY = shieldIconOffset;
+    	int chargeIconY = 2*shieldIconY + shieldIconH;
+    	
+    	int iconBlockStringY = shieldIconY + shieldIconH*4/6;
+    	int iconChargeStringY = iconBlockStringY + shieldIconH*7/6;
+    	
+    	this.playerW = this.width/3;
+    	this.playerH = this.playerW;
+    	this.playerX_A = 0;
+    	this.playerX_B = this.width - this.playerX_A;
+    	this.playerY = this.height/5;
+    	
+		int shieldY = playerY + playerH/3 + playerH/8;
+		int shieldW = playerW/3;
+		int shieldH = playerH/3;
+		int shieldX_A = playerX_A + playerW/4 - playerW/12;
+		int shieldX_B = width - shieldX_A;
+		
+		int sword_AX = playerX_A + playerW - playerW/50;
+		int sword_AY = playerY - playerH*3/200;
+		int sword_AW = playerW*5/8;
+		int sword_AH = playerH*5/8;
+		int sword_BX = width - sword_AX;
+		int swordAngle = 40;
+    	
+		Graphics2D g2d = (Graphics2D) g;
+		
+    	Font labelFont = new Font("Ariel", Font.BOLD, 20);
+    	g.setFont(labelFont);
+		
+    	// set bg
+    	try {
+			Image img = ImageIO.read(new File("res/background - mountain base.png"));
+			g.drawImage(img, 0, 0, this.width, this.height, getFocusCycleRootAncestor());
+    	} catch (IOException e) {
+			e.printStackTrace();
+		}
     	
     	// draw icons
     	try {
-			Image blockIconA = ImageIO.read(new File("res/block counter icon.png"));
-			g.drawImage(blockIconA, A_shieldIconX, shieldIconY, shieldIconW, shieldIconH, getFocusCycleRootAncestor());
-			Image chargeIconA = ImageIO.read(new File("res/charge multiplier icon.png"));
-			g.drawImage(chargeIconA, A_shieldIconX, chargeIconY, shieldIconW, shieldIconH, getFocusCycleRootAncestor());
+			Image blockIconA = ImageIO.read(new File("res/icon - block counter.png"));
+			g.drawImage(blockIconA, shieldIconX_A, shieldIconY, shieldIconW, shieldIconH, getFocusCycleRootAncestor());
+			Image chargeIconA = ImageIO.read(new File("res/icon - charge multiplier.png"));
+			g.drawImage(chargeIconA, shieldIconX_A, chargeIconY, shieldIconW, shieldIconH, getFocusCycleRootAncestor());
 	    	
-	    	Image blockIconB = ImageIO.read(new File("res/block counter icon.png"));
-			g.drawImage(blockIconB, B_shieldIconX, shieldIconY, shieldIconW, shieldIconH, getFocusCycleRootAncestor());
-			Image chargeIconB = ImageIO.read(new File("res/charge multiplier icon.png"));
-			g.drawImage(chargeIconB, B_shieldIconX, chargeIconY, shieldIconW, shieldIconH, getFocusCycleRootAncestor());
+	    	Image blockIconB = ImageIO.read(new File("res/icon - block counter.png"));
+			g.drawImage(blockIconB, shieldIconX_B, shieldIconY, shieldIconW, shieldIconH, getFocusCycleRootAncestor());
+			Image chargeIconB = ImageIO.read(new File("res/icon - charge multiplier.png"));
+			g.drawImage(chargeIconB, shieldIconX_B, chargeIconY, shieldIconW, shieldIconH, getFocusCycleRootAncestor());
 			
 			// whitener
 			g.setColor(new Color(255, 255, 255, 75));
-			g.fillRect(A_shieldIconX+shieldIconW, shieldIconY, shieldIconW, 2*shieldIconH+shieldIconOffset);
-			g.fillRect(B_shieldIconX-shieldIconW, shieldIconY, shieldIconW, 2*shieldIconH+shieldIconOffset);
-			
+			g.fillRect(shieldIconX_A+shieldIconW, shieldIconY, shieldIconW, 2*shieldIconH+shieldIconOffset);
+			g.fillRect(shieldIconX_B-shieldIconW, shieldIconY, shieldIconW, 2*shieldIconH+shieldIconOffset);
 			
 			g.setColor(Color.BLACK);
 			FontMetrics metrics = g.getFontMetrics(g.getFont());
 			
 			int textWidth = metrics.stringWidth(""+battleLogic.getPbsA().getBlockCounter());
-			int startX = A_shieldIconX + shieldIconW + shieldIconW/2 - (textWidth / 2);
-			g.drawString(""+battleLogic.getPbsA().getBlockCounter(), startX, A_blockStringY);
+			int startX = shieldIconX_A + shieldIconW + shieldIconW/2 - (textWidth / 2);
+			g.drawString(""+battleLogic.getPbsA().getBlockCounter(), startX, iconBlockStringY);
 			
 			textWidth = metrics.stringWidth(""+battleLogic.getPbsA().getCurrCharge());
-			startX = A_shieldIconX + shieldIconW + shieldIconW/2 - (textWidth / 2);
-	    	g.drawString(""+battleLogic.getPbsA().getCurrCharge(), startX, A_chargeStringY);
+			startX = shieldIconX_A + shieldIconW + shieldIconW/2 - (textWidth / 2);
+	    	g.drawString(""+battleLogic.getPbsA().getCurrCharge(), startX, iconChargeStringY);
 	    	
 	    	textWidth = metrics.stringWidth(""+battleLogic.getPbsB().getBlockCounter());
-			startX = B_shieldIconX - shieldIconW/2 - (textWidth / 2);
-	    	g.drawString(""+battleLogic.getPbsB().getBlockCounter(), startX, A_blockStringY);
+			startX = shieldIconX_B - shieldIconW/2 - (textWidth / 2);
+	    	g.drawString(""+battleLogic.getPbsB().getBlockCounter(), startX, iconBlockStringY);
 	    	
 	    	textWidth = metrics.stringWidth(""+battleLogic.getPbsB().getCurrCharge());
-	    	startX = B_shieldIconX - shieldIconW/2 - (textWidth / 2);
-	    	g.drawString(""+battleLogic.getPbsB().getCurrCharge(), startX, A_chargeStringY);
-	    	
-	    	// outline
-			/*g.drawRect(A_shieldIconX, shieldIconY, shieldIconW, shieldIconH);
-	    	g.drawRect(A_shieldIconX, chargeIconY, shieldIconW, shieldIconH);
-			g.drawRect(B_shieldIconX, shieldIconY, shieldIconW, shieldIconH);
-	    	g.drawRect(B_shieldIconX, chargeIconY, shieldIconW, shieldIconH);*/
-	    	
-		} catch (IOException e1) {
+	    	startX = shieldIconX_B - shieldIconW/2 - (textWidth / 2);
+	    	g.drawString(""+battleLogic.getPbsB().getCurrCharge(), startX, iconChargeStringY);
+	    } catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
     	
     	
-    	// A
     	// health bar
-    	g.setColor(new Color(0, healthBarGreen, 0));
-    	g.fillRect(A_healthBarX + (healthBarW-healthBarW*battleLogic.getPbsA().getCurrHealth()/battleLogic.getPbsA().getMaxHealth()),
+    	g.setColor(new Color(healthBarRed, healthBarGreen, healthBarBlue));
+    	g.fillRect(healthBarX_A + (healthBarW-healthBarW*battleLogic.getPbsA().getCurrHealth()/battleLogic.getPbsA().getMaxHealth()),
     			healthBarY, healthBarW*battleLogic.getPbsA().getCurrHealth()/battleLogic.getPbsA().getMaxHealth(), healthBarH);
     	g.setColor(Color.BLACK);
-    	g.drawRect(A_healthBarX, healthBarY, healthBarW, healthBarH);
+    	g.drawRect(healthBarX_A, healthBarY, healthBarW, healthBarH);
+    	
+    	g.setColor(new Color(0, healthBarGreen, 0));
+    	g.fillRect(healthBarX_B, healthBarY, healthBarW*battleLogic.getPbsB().getCurrHealth()/battleLogic.getPbsB().getMaxHealth(), healthBarH);
+    	g.setColor(Color.BLACK);
+    	g.drawRect(healthBarX_B, healthBarY, healthBarW, healthBarH);
+    	
     	// stam bar
     	g.setColor(new Color(stamBarRed, stamBarGreen, stamBarBlue));
-    	g.fillRect(A_stamBarX + (stamBarW-stamBarW*battleLogic.getPbsA().getCurrStamina()/battleLogic.getPbsA().getMaxStamina()),
+    	g.fillRect(stamBarX_A + (stamBarW-stamBarW*battleLogic.getPbsA().getCurrStamina()/battleLogic.getPbsA().getMaxStamina()),
     			stamBarY, stamBarW*battleLogic.getPbsA().getCurrStamina()/battleLogic.getPbsA().getMaxStamina(), stamBarH);
     	g.setColor(Color.BLACK);
-    	g.drawRect(A_stamBarX, stamBarY, stamBarW, stamBarH);
+    	g.drawRect(stamBarX_A, stamBarY, stamBarW, stamBarH);
     	
-    	// B
-    	// health Bar
-    	g.setColor(new Color(0, healthBarGreen, 0));
-    	g.fillRect(B_healthBarX, healthBarY, healthBarW*battleLogic.getPbsB().getCurrHealth()/battleLogic.getPbsB().getMaxHealth(), healthBarH);
-    	g.setColor(Color.BLACK);
-    	g.drawRect(B_healthBarX, healthBarY, healthBarW, healthBarH);
-    	// stam bar
+
     	g.setColor(new Color(stamBarRed, stamBarGreen, stamBarBlue));
-    	g.fillRect(B_stamBarX, stamBarY, stamBarW*battleLogic.getPbsB().getCurrStamina()/battleLogic.getPbsB().getMaxStamina(), stamBarH);
+    	g.fillRect(stamBarX_B, stamBarY, stamBarW*battleLogic.getPbsB().getCurrStamina()/battleLogic.getPbsB().getMaxStamina(), stamBarH);
     	g.setColor(Color.BLACK);
-    	g.drawRect(B_stamBarX, stamBarY, stamBarW, stamBarH);
-    	// temp player
-    	//g.drawRect(Bx, Ay, Aw, Ah);
-    	//g.drawString(battleLogic.getPbsB().getName(), Bx, Ay);
+    	g.drawRect(stamBarX_B, stamBarY, stamBarW, stamBarH);
     	
-    	//display name
+    	// display name, might be redundant
     	g.setColor(new Color(255, 255, 255, 75));
-    	//g.fillRect(this.width*1/3, this.Ay*2-this.height/40, this.width*1/3, 20);
-    	
     	FontMetrics metrics = g.getFontMetrics(g.getFont());
     	int textBgIndent = this.width/60;
     	if(battleLogic.isTurnA()) {
     		int textWidth = metrics.stringWidth("Pick "+battleLogic.getPbsA().getName()+"'s move");
     		int startX = this.width/2 - (textWidth / 2);
-    		g.fillRect(startX-textBgIndent, this.height*16/24, textWidth+2*textBgIndent, this.height/30);
+    		g.fillRect(startX-textBgIndent, this.height*63/96, textWidth+2*textBgIndent, this.height/15);
         	g.setColor(Color.BLACK);
     		g.drawString("Pick "+battleLogic.getPbsA().getName()+"'s move", startX, this.buttonY1 - this.height/60);
     	} else {
     		int textWidth = metrics.stringWidth("Pick "+battleLogic.getPbsB().getName()+"'s move");
     		int startX = this.width/2 - (textWidth / 2);
-    		g.fillRect(startX-textBgIndent, this.height*16/24, textWidth+2*textBgIndent, this.height/30);
+    		g.fillRect(startX-textBgIndent, this.height*63/96, textWidth+2*textBgIndent, this.height/15);
         	g.setColor(Color.BLACK);
     		g.drawString("Pick "+battleLogic.getPbsB().getName()+"'s move", startX, this.buttonY1 - this.height/60);
     	}
-    	
-    	
-    	// test new player model
-    	int playerAX = 100;
-    	int playerAY = 100;
-    	int playerAW = 300;
-    	int playerAH = 300;
-    	g.setColor(Color.BLACK);
-    	//g.fillRect(this.Ax, this.Ay, this.Aw, this.Ah);
     
     	try {
-    		
-    		int shield_AX = Ax + Aw/4 - Aw/12;
-    		int shield_AY = Ay + Ah/3 + Ah/8;
-    		int shield_AW = Aw/3;
-    		int shield_AH = Ah/3;
-    		int shield_BX = width - shield_AX;
-    		
-    		int sword_AX = Ax + Aw - width/50;		//micro adjustments not relative to size
-    		int sword_AY = Ay - height/200;
-    		int sword_AW = Aw*5/8;
-    		int sword_AH = Ah*5/8;
-    		int sword_BX = width - sword_AX;
-    		int swordAngle = 40;
     		
     		// player A
     		Image playerModelA = ImageIO.read(new File("res/player - default.png"));
     		AffineTransform transformPlayerModelA = new AffineTransform();
-    		transformPlayerModelA.translate(this.Ax, this.Ay);
-    		transformPlayerModelA.scale(this.Aw/playerModelA.getWidth(getFocusCycleRootAncestor()), this.Ah/playerModelA.getHeight(getFocusCycleRootAncestor()));
+    		transformPlayerModelA.translate(this.playerX_A, this.playerY);
+    		transformPlayerModelA.scale(this.playerW/playerModelA.getWidth(getFocusCycleRootAncestor()), this.playerH/playerModelA.getHeight(getFocusCycleRootAncestor()));
     		g2d.drawImage(playerModelA, transformPlayerModelA, null);
     		
-    		Image armourModelA = ImageIO.read(new File("res/armour - default.png"));
+    		Image armourModelA = ImageIO.read(new File("res/armour - "+battleLogic.getPbsA().getPlayer().getInventory().getActiveArmour().getName()+".png"));
     		AffineTransform transformArmourModelA = new AffineTransform();
-    		transformArmourModelA.translate(this.Ax, this.Ay);
-    		transformArmourModelA.scale(this.Aw/playerModelA.getWidth(getFocusCycleRootAncestor()), this.Ah/playerModelA.getHeight(getFocusCycleRootAncestor()));
+    		transformArmourModelA.translate(this.playerX_A, this.playerY);
+    		transformArmourModelA.scale(this.playerW/playerModelA.getWidth(getFocusCycleRootAncestor()), this.playerH/playerModelA.getHeight(getFocusCycleRootAncestor()));
     		g2d.drawImage(armourModelA, transformArmourModelA, null);
     		
-    		Image shieldModelA = ImageIO.read(new File("res/pillow.png"));
+    		Image shieldModelA = ImageIO.read(new File("res/shield - "+battleLogic.getPbsA().getPlayer().getInventory().getActiveShield().getName()+".png"));
     		AffineTransform transformShieldModelA = new AffineTransform();
-    		transformShieldModelA.translate(shield_AX, shield_AY);
-    		transformShieldModelA.scale(shield_AW/shieldModelA.getWidth(getFocusCycleRootAncestor()), shield_AH/shieldModelA.getHeight(getFocusCycleRootAncestor()));
+    		transformShieldModelA.translate(shieldX_A, shieldY);
+    		transformShieldModelA.scale(shieldW/shieldModelA.getWidth(getFocusCycleRootAncestor()), shieldH/shieldModelA.getHeight(getFocusCycleRootAncestor()));
     		g2d.drawImage(shieldModelA, transformShieldModelA, null);
     		
-    		Image swordModelA = ImageIO.read(new File("res/twig.png"));
+    		Image swordModelA = ImageIO.read(new File("res/sword - "+battleLogic.getPbsA().getPlayer().getInventory().getActiveSword().getName()+".png"));
     		AffineTransform transformSwordModelA = new AffineTransform();
     		transformSwordModelA.translate(sword_AX, sword_AY);
     		transformSwordModelA.scale(sword_AW/swordModelA.getWidth(getFocusCycleRootAncestor()), sword_AH/swordModelA.getHeight(getFocusCycleRootAncestor()));
-    		transformSwordModelA.rotate(Math.toRadians(40));
+    		transformSwordModelA.rotate(Math.toRadians(swordAngle));
     		g2d.drawImage(swordModelA, transformSwordModelA, null);
     		
     		// player B
-    		// using lots of a variables
     		Image playerModelB = ImageIO.read(new File("res/player - default.png"));
     		AffineTransform transformPlayerModelB = new AffineTransform();
-    		transformPlayerModelB.translate(this.Bx, this.Ay);
-    		transformPlayerModelB.scale(-this.Aw/playerModelA.getWidth(getFocusCycleRootAncestor()), this.Ah/playerModelA.getHeight(getFocusCycleRootAncestor()));
+    		transformPlayerModelB.translate(this.playerX_B, this.playerY);
+    		transformPlayerModelB.scale(-this.playerW/playerModelA.getWidth(getFocusCycleRootAncestor()), this.playerH/playerModelA.getHeight(getFocusCycleRootAncestor()));
     		g2d.drawImage(playerModelB, transformPlayerModelB, null);
     		
-    		Image armourModelB = ImageIO.read(new File("res/armour - default.png"));
+    		Image armourModelB = ImageIO.read(new File("res/armour - "+battleLogic.getPbsB().getPlayer().getInventory().getActiveArmour().getName()+".png"));
     		AffineTransform transformArmourModelB = new AffineTransform();
-    		transformArmourModelB.translate(this.Bx, this.Ay);
-    		transformArmourModelB.scale(-this.Aw/armourModelB.getWidth(getFocusCycleRootAncestor()), this.Ah/armourModelB.getHeight(getFocusCycleRootAncestor()));
+    		transformArmourModelB.translate(this.playerX_B, this.playerY);
+    		transformArmourModelB.scale(-this.playerW/armourModelB.getWidth(getFocusCycleRootAncestor()), this.playerH/armourModelB.getHeight(getFocusCycleRootAncestor()));
     		g2d.drawImage(armourModelB, transformArmourModelB, null);
     		
-    		Image shieldModelB = ImageIO.read(new File("res/cardboard.png"));
+    		Image shieldModelB = ImageIO.read(new File("res/shield - "+battleLogic.getPbsB().getPlayer().getInventory().getActiveShield().getName()+".png"));
     		AffineTransform transformShieldModelB = new AffineTransform();
-    		transformShieldModelB.translate(shield_BX, shield_AY);
-    		transformShieldModelB.scale(-shield_AW/shieldModelB.getWidth(getFocusCycleRootAncestor()), shield_AH/shieldModelB.getHeight(getFocusCycleRootAncestor()));
+    		transformShieldModelB.translate(shieldX_B, shieldY);
+    		transformShieldModelB.scale(-shieldW/shieldModelB.getWidth(getFocusCycleRootAncestor()), shieldH/shieldModelB.getHeight(getFocusCycleRootAncestor()));
     		g2d.drawImage(shieldModelB, transformShieldModelB, null);
     		
-    		Image swordModelB = ImageIO.read(new File("res/sharp stick.png"));
+    		Image swordModelB = ImageIO.read(new File("res/sword - "+battleLogic.getPbsB().getPlayer().getInventory().getActiveSword().getName()+".png"));
     		AffineTransform transformSwordModelB = new AffineTransform();
     		transformSwordModelB.translate(sword_BX, sword_AY);
     		transformSwordModelB.scale(-sword_AW/swordModelB.getWidth(getFocusCycleRootAncestor()), sword_AH/swordModelB.getHeight(getFocusCycleRootAncestor()));
-    		transformSwordModelB.rotate(Math.toRadians(40));
+    		transformSwordModelB.rotate(Math.toRadians(swordAngle));
     		g2d.drawImage(swordModelB, transformSwordModelB, null);
-    		
 	    } catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
     	
-    	
-    	// player info panel
-    	if(!battleLogic.isBattleOver() && mouse.getHovered().equals("A")) {
-    		DrawPlayerInfo info = new DrawPlayerInfo(this, battleLogic.getPbsA(), 0, g);
-    	}else if(!battleLogic.isBattleOver() && mouse.getHovered() == "B") {
-    		DrawPlayerInfo info = new DrawPlayerInfo(this, battleLogic.getPbsB(), width*3/4, g);
+    	if(!battleLogic.getInvalidMoveString().equals("NONE")) {
+    		
+    		int textWidth = metrics.stringWidth(battleLogic.getInvalidMoveString());
+    		int startX = this.width/2 - (textWidth / 2);
+    		g.setColor(new Color(0, 0, 0, 150));
+    		g.fillRect(startX-textBgIndent, this.height/2, textWidth + 2*textBgIndent, this.height/15);
+    		g.setColor(Color.RED);
+    		g.drawString(battleLogic.getInvalidMoveString(), startX, height/2 + height/25 + height/200);
+    		g.setColor(Color.BLACK);
     	}
     	
+    	// player info panel
+    	if(!battleLogic.isBattleOver() && this.mouse.getHovered().equals("A")) {
+    		DrawPlayerInfo info = new DrawPlayerInfo(this, battleLogic.getPbsA(), width/10, g);
+    	}else if(!battleLogic.isBattleOver() && this.mouse.getHovered() == "B") {
+    		DrawPlayerInfo info = new DrawPlayerInfo(this, battleLogic.getPbsB(), width*3/4-width/10, g);
+    	}
     	
+    	// battle over graphic
     	if(battleLogic.isBattleOver()) {
     		
     		swingButton.setVisible(false);
@@ -412,12 +363,12 @@ public class DrawBattle extends JPanel{
     		// write game over (tie not implemented)
     		try {
 				if(battleLogic.getDeadPlayer().equals("A")) {
-					Image label = ImageIO.read(new File("res/you lose label.png"));
+					Image label = ImageIO.read(new File("res/label - you lose.png"));
 	    			g.drawImage(label, this.width/6, this.height/6, this.width*2/3, this.height*2/3, getFocusCycleRootAncestor());
 	    			
 	    			
 	    		}else if(battleLogic.getDeadPlayer().equals("B")) {
-	    			Image label = ImageIO.read(new File("res/you win label.png"));
+	    			Image label = ImageIO.read(new File("res/label - you win.png"));
 	    			g.drawImage(label, this.width/6, this.height/6, this.width*2/3, this.height*2/3, getFocusCycleRootAncestor());
 	    		}
 				
@@ -430,19 +381,17 @@ public class DrawBattle extends JPanel{
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-    		
-			
-    		//launch menu in battle Logi
-    		
-			//frame.remove(this);
 
-    		
     		// update stuff
     		
     		// return to menu
     		
     	}
-    	
+    	//g.setColor(Color.RED);
+    	//g.drawRect(0, 0, 300, 300);
+    	//g.drawRect(300, 0, 300, 300);
+    	//g.drawRect(0, 300, 300, 300);
+    	//g.drawRect(600, 0, 300, 300);
     }
     
 	public BattleLogic getBattleLogic() {
@@ -470,44 +419,43 @@ public class DrawBattle extends JPanel{
 	}
 
 	public int getAx() {
-		return Ax;
+		return playerX_A;
 	}
 
 	public void setAx(int ax) {
-		Ax = ax;
+		playerX_A = ax;
 	}
 
 	public int getAy() {
-		return Ay;
+		return playerY;
 	}
 
 	public void setAy(int ay) {
-		Ay = ay;
+		playerY = ay;
 	}
 
 	public int getAw() {
-		return Aw;
+		return playerW;
 	}
 	
 	public void setAw(int aw) {
-		Aw = aw;
+		playerW = aw;
 	}
 	
 	public int getAh() {
-		return Ah;
+		return playerH;
 	}
 	
 	public void setAh(int ah) {
-		Ah = ah;
+		playerH = ah;
 	}
 
 	public int getBx() {
-		return Bx;
+		return playerX_B;
 	}
 	public void setBx(int bx) {
-		Bx = bx;
+		playerX_B = bx;
 	}
-	
 	
 
 }
