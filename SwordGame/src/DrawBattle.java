@@ -8,6 +8,8 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -24,10 +26,11 @@ public class DrawBattle extends JPanel{
 	String nextMove;
 	boolean moveChosen = false;
 	int playerX_A, playerY, playerW, playerH, playerX_B;
-	int buttonX1, buttonY1;
+	int buttonWidth, buttonHeight, buttonX1, buttonX2, buttonY1, buttonY2, altButtonWidth;
 	boolean buttonVisible;
-	JButton swingButton, jabButton, blockButton, chargeButton;
+	JButton swingButton, jabButton, blockButton, chargeButton, swapSwordsButton, forfeitButton;
 	JFrame frame;
+	boolean hoveringSwapSwordsButton = false;
 	
     public DrawBattle(JFrame frame, BattleLogic battleLogic) {
     	
@@ -47,17 +50,21 @@ public class DrawBattle extends JPanel{
     	addMouseListener(this.mouse);
     	addMouseMotionListener(this.mouse);
     	
-    	int buttonWidth = this.width/6;
-    	int buttonHeight = buttonWidth/2;
+    	this.buttonWidth = this.width/6;
+    	this.buttonHeight = buttonWidth/2;
     	this.buttonX1 = this.width/2 - buttonWidth;
-    	int buttonX2 = this.width/2;
+    	this.buttonX2 = this.width/2;
     	this.buttonY1 = this.height*17/24;
-    	int buttonY2 = buttonY1 + buttonHeight;
+    	this.buttonY2 = buttonY1 + buttonHeight;
+    	this.altButtonWidth = buttonWidth/2;
     	
     	this.swingButton = new JButton();
     	this.jabButton = new JButton();
     	this.blockButton = new JButton();
     	this.chargeButton = new JButton();
+    	this.swapSwordsButton = new JButton();
+    	this.forfeitButton = new JButton();
+    	
     	try {
 	    	swingButton.setBounds(buttonX1, buttonY1, buttonWidth, buttonHeight);
 	    	add(swingButton);
@@ -82,9 +89,19 @@ public class DrawBattle extends JPanel{
 	    	Image chargeButtonImage = ImageIO.read(new File("res/button - charge.png"));
 			ImageIcon chargeButtonIcon = new ImageIcon(chargeButtonImage.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH));
 			chargeButton.setIcon(chargeButtonIcon);
+			
+			swapSwordsButton.setBounds(buttonX1-altButtonWidth, buttonY1+buttonHeight/2, altButtonWidth, buttonHeight);
+	    	add(swapSwordsButton);
+	    	Image swapSwordsButtonImage = ImageIO.read(new File("res/button - swap swords.png"));
+			ImageIcon swapSwordsButtonIcon = new ImageIcon(swapSwordsButtonImage.getScaledInstance(altButtonWidth, buttonHeight, Image.SCALE_SMOOTH));
+			swapSwordsButton.setIcon(swapSwordsButtonIcon);
 	    	
+			forfeitButton.setBounds(buttonX2+buttonWidth, buttonY1+buttonHeight/2, altButtonWidth, buttonHeight);
+			add(forfeitButton);
+	    	Image forfeitButtonImage = ImageIO.read(new File("res/button - forfeit.png"));
+			ImageIcon forfeitButtonIcon = new ImageIcon(forfeitButtonImage.getScaledInstance(altButtonWidth, buttonHeight, Image.SCALE_SMOOTH));
+			forfeitButton.setIcon(forfeitButtonIcon);
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
     	
@@ -121,6 +138,37 @@ public class DrawBattle extends JPanel{
             }
         });
     	
+    	swapSwordsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	moveChosen = true;
+            	setNextMove("CHARGE");
+            }
+        });
+    	
+    	swapSwordsButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            	hoveringSwapSwordsButton = true;
+            	repaint();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            	hoveringSwapSwordsButton = false;
+            	repaint();
+            }
+        });
+    	
+    	forfeitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	
+            	// count as loss
+            	
+            	DrawMenu menu = new DrawMenu(frame);
+            }
+        });
     }
     
     
@@ -161,7 +209,7 @@ public class DrawBattle extends JPanel{
     	this.playerH = this.playerW;
     	this.playerX_A = 0;
     	this.playerX_B = this.width - this.playerX_A;
-    	this.playerY = this.height/5;
+    	this.playerY = this.height/5 + this.height/50;
     	
 		int shieldY = playerY + playerH/3 + playerH/8;
 		int shieldW = playerW/3;
@@ -169,10 +217,10 @@ public class DrawBattle extends JPanel{
 		int shieldX_A = playerX_A + playerW/4 - playerW/12;
 		int shieldX_B = width - shieldX_A;
 		
-		int sword_AX = playerX_A + playerW - playerW/50;
-		int sword_AY = playerY - playerH*3/200;
-		int sword_AW = playerW*5/8;
-		int sword_AH = playerH*5/8;
+		int sword_AX = playerX_A + playerW + playerW/6;
+		int sword_AY = playerY - playerH/3 + playerH/40;
+		int sword_AW = playerW/3;
+		int sword_AH = playerH;
 		int sword_BX = width - sword_AX;
 		int swordAngle = 40;
     	
@@ -264,13 +312,15 @@ public class DrawBattle extends JPanel{
     		int startX = this.width/2 - (textWidth / 2);
     		g.fillRect(startX-textBgIndent, this.height*63/96, textWidth+2*textBgIndent, this.height/15);
         	g.setColor(Color.BLACK);
-    		g.drawString("Pick "+battleLogic.getPbsA().getName()+"'s move", startX, this.buttonY1 - this.height/60);
+        	
+    		g.drawString("Pick "+battleLogic.getPbsA().getName()+"'s move", startX, height/2+height/5-height/200);
+    	
     	} else {
     		int textWidth = metrics.stringWidth("Pick "+battleLogic.getPbsB().getName()+"'s move");
     		int startX = this.width/2 - (textWidth / 2);
     		g.fillRect(startX-textBgIndent, this.height*63/96, textWidth+2*textBgIndent, this.height/15);
         	g.setColor(Color.BLACK);
-    		g.drawString("Pick "+battleLogic.getPbsB().getName()+"'s move", startX, this.buttonY1 - this.height/60);
+        	g.drawString("Pick "+battleLogic.getPbsB().getName()+"'s move", startX, height/2+height/5-height/200);
     	}
     
     	try {
@@ -294,7 +344,7 @@ public class DrawBattle extends JPanel{
     		transformShieldModelA.scale(shieldW/shieldModelA.getWidth(getFocusCycleRootAncestor()), shieldH/shieldModelA.getHeight(getFocusCycleRootAncestor()));
     		g2d.drawImage(shieldModelA, transformShieldModelA, null);
     		
-    		Image swordModelA = ImageIO.read(new File("res/sword - "+battleLogic.getPbsA().getPlayer().getInventory().getActiveSword().getName()+".png"));
+    		Image swordModelA = ImageIO.read(new File("res/sword - "+battleLogic.getPbsA().getActiveSword().getName()+".png"));
     		AffineTransform transformSwordModelA = new AffineTransform();
     		transformSwordModelA.translate(sword_AX, sword_AY);
     		transformSwordModelA.scale(sword_AW/swordModelA.getWidth(getFocusCycleRootAncestor()), sword_AH/swordModelA.getHeight(getFocusCycleRootAncestor()));
@@ -320,7 +370,7 @@ public class DrawBattle extends JPanel{
     		transformShieldModelB.scale(-shieldW/shieldModelB.getWidth(getFocusCycleRootAncestor()), shieldH/shieldModelB.getHeight(getFocusCycleRootAncestor()));
     		g2d.drawImage(shieldModelB, transformShieldModelB, null);
     		
-    		Image swordModelB = ImageIO.read(new File("res/sword - "+battleLogic.getPbsB().getPlayer().getInventory().getActiveSword().getName()+".png"));
+    		Image swordModelB = ImageIO.read(new File("res/sword - "+battleLogic.getPbsB().getActiveSword().getName()+".png"));
     		AffineTransform transformSwordModelB = new AffineTransform();
     		transformSwordModelB.translate(sword_BX, sword_AY);
     		transformSwordModelB.scale(-sword_AW/swordModelB.getWidth(getFocusCycleRootAncestor()), sword_AH/swordModelB.getHeight(getFocusCycleRootAncestor()));
@@ -343,11 +393,26 @@ public class DrawBattle extends JPanel{
     	}
     	
     	// player info panel
-    	if(!battleLogic.isBattleOver() && this.mouse.getHovered().equals("A")) {
-    		DrawPlayerInfo info = new DrawPlayerInfo(this, battleLogic.getPbsA(), width/10, g);
-    	}else if(!battleLogic.isBattleOver() && this.mouse.getHovered() == "B") {
-    		DrawPlayerInfo info = new DrawPlayerInfo(this, battleLogic.getPbsB(), width*3/4-width/10, g);
+    	// inactive sword info panel
+    	if(this.mouse != null) {
+    		if(!battleLogic.isBattleOver()) {
+    			
+    			if(this.mouse.getPlayerHovered().equals("A")) {
+    				DrawPlayerInfo playerInfoPanel = new DrawPlayerInfo(this, battleLogic.getPbsA(), width/10, g);
+            	}else if(this.mouse.getPlayerHovered().equals("B")) {
+            		DrawPlayerInfo playerInfoPanel = new DrawPlayerInfo(this, battleLogic.getPbsB(), width*3/4-width/10, g);
+            	}else if(this.hoveringSwapSwordsButton) {
+            		if(battleLogic.isTurnA()) {
+                		DrawSwordInfo swordInfoPanel = new DrawSwordInfo(this, battleLogic.getPbsA(), g);
+                	}else {
+                		DrawSwordInfo swordInfoPanel = new DrawSwordInfo(this, battleLogic.getPbsB(), g);
+                	}
+            	}
+    		}
+    			
     	}
+    	
+    	// inactive sword info panel
     	
     	// battle over graphic
     	if(battleLogic.isBattleOver()) {

@@ -135,6 +135,9 @@ public class BattleLogic implements Runnable{
         } else if(nextMove.equals("CHARGE") && player.getCurrCharge() == 3.5) {
         	isValid = false;
         	invalidMoveString = "CHARGE MULTIPLIER ALREADY AT MAX";
+        } else if(nextMove.equals("SWAP_SWORDS") && player.getInactiveSword().getDurability() == 0) {
+        	isValid = false;
+        	invalidMoveString = "OTHER SWORD IS BROKEN";
         }
 		return isValid;
 	}
@@ -191,6 +194,11 @@ public class BattleLogic implements Runnable{
 	
 	public String getDeadPlayer() {
 		return this.deadPlayer;
+		
+	}
+	
+	public void setDeadPlayer(String deadPlayer) {
+		this.deadPlayer = deadPlayer;
 		
 	}
 

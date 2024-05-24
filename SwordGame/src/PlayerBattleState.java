@@ -11,6 +11,7 @@ public class PlayerBattleState {
 	private int blockCounter;
 	private int activeSwordDurability, maxActiveSwordDurability, inactiveSwordDurability, maxInactiveSwordDurability;
 	private int activeShieldDurability, maxActiveShieldDurability;
+	private Sword activeSword, inactiveSword;
 	
 	private int swordChoice;
 	
@@ -30,6 +31,8 @@ public class PlayerBattleState {
 		this.maxInactiveSwordDurability = this.inactiveSwordDurability;
 		this.activeShieldDurability = player.getInventory().getActiveShield().getDurability();
 		this.maxActiveShieldDurability = this.activeShieldDurability;
+		this.activeSword = player.getInventory().getActiveSword();
+		this.inactiveSword = player.getInventory().getInactiveSword();
 		
 		this.currMove = "NONE";
 		
@@ -41,6 +44,20 @@ public class PlayerBattleState {
 		this.faster = false;
 		//this.swordChoice = 0;
 	
+	}
+	
+	public void swapSwords() {
+		Sword tempSword = activeSword;
+		activeSword = inactiveSword;
+		inactiveSword = tempSword;
+		
+		int tempDur = activeSwordDurability;
+		activeSwordDurability = inactiveSwordDurability;
+		inactiveSwordDurability = tempDur;
+		
+		int tempMaxDur = activeSwordDurability;
+		maxActiveSwordDurability = maxInactiveSwordDurability;
+		maxInactiveSwordDurability = tempMaxDur;
 	}
 
 	protected boolean isFaster() {
@@ -216,6 +233,22 @@ public class PlayerBattleState {
 
 	public void setMaxActiveShieldDurability(int maxActiveShieldDurability) {
 		this.maxActiveShieldDurability = maxActiveShieldDurability;
+	}
+
+	public Sword getActiveSword() {
+		return activeSword;
+	}
+
+	public void setActiveSword(Sword activeSword) {
+		this.activeSword = activeSword;
+	}
+
+	public Sword getInactiveSword() {
+		return inactiveSword;
+	}
+
+	public void setInactiveSword(Sword inactiveSword) {
+		this.inactiveSword = inactiveSword;
 	}
 	
 	

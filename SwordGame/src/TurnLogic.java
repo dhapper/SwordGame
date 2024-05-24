@@ -6,16 +6,16 @@ public class TurnLogic {
 		
 		//if(attacker.getActiveSwordDurability() != 0)
 		
-		if(!attacker.getCurrMove().equals("BLOCK") && !attacker.getCurrMove().equals("CHARGE")) {
+		if(!attacker.getCurrMove().equals("BLOCK") && !attacker.getCurrMove().equals("CHARGE") && !attacker.getCurrMove().equals("SWAP_SWORDS")) {
 			
 		
 			Random random = new Random();
 	        double randomMultiplier = 0.9 + (random.nextDouble() * 0.2);
-			double baseAttack = (attacker.getCurrStrength() * attacker.getPlayer().getInventory().getActiveSword().getDamage() /10.0)
+			double baseAttack = (attacker.getCurrStrength() * attacker.getActiveSword().getDamage() /10.0)
 					- (defender.getPlayer().getInventory().getActiveArmour().getProtection());
 	        int totalAttack = (int) (baseAttack * randomMultiplier * attacker.getCurrCharge());
 	        
-	        // jab/block calcs
+	        // jab/block calcus
 	        if(attacker.getCurrMove().equals("JAB")) {
 	        	if(defender.getCurrMove().equals("BLOCK") && defender.isFaster())
 	        		totalAttack = 0;
@@ -27,10 +27,10 @@ public class TurnLogic {
 	        if(defender.getCurrMove().equals("BLOCK")) {
 	        	if(defender.isFaster()) {
 	        		System.out.println("resistance: "+defender.getPlayer().getInventory().getActiveShield().getResistance());
-	        		System.out.println("piercing: "+attacker.getPlayer().getInventory().getActiveSword().getPiercing());
+	        		System.out.println("piercing: "+attacker.getActiveSword().getPiercing());
 	        		System.out.println("initial damage: "+totalAttack);
 	        		System.out.println("----------------------------------------------");
-	        		int shieldLeak = defender.getPlayer().getInventory().getActiveShield().getResistance()-attacker.getPlayer().getInventory().getActiveSword().getPiercing();
+	        		int shieldLeak = defender.getPlayer().getInventory().getActiveShield().getResistance()-attacker.getActiveSword().getPiercing();
 	        		if(shieldLeak >= 100) {
 	        			totalAttack = 0;
 	        		}else if(shieldLeak > 0) {
@@ -58,7 +58,7 @@ public class TurnLogic {
 			attacker.addToCurrStamina(-attacker.getPlayer().getInventory().getActiveSword().getStaminaUsage());
 			attacker.setBlockCounter(0);
 		} else if(attacker.getCurrMove().equals("JAB")) {
-			attacker.addToCurrStamina(-attacker.getPlayer().getInventory().getActiveSword().getStaminaUsage()/2);
+			attacker.addToCurrStamina(-attacker.getPlayer().getInventory().getActiveSword().getStaminaUsage());
 			attacker.setBlockCounter(0);
 		} else if(attacker.getCurrMove().equals("BLOCK")) {
 			attacker.addToCurrStamina(attacker.getPlayer().getInventory().getActiveShield().getStaminaRegain());
@@ -66,8 +66,11 @@ public class TurnLogic {
 		} else if(attacker.getCurrMove().equals("CHARGE")) {
 			attacker.increaseCurrCharge();
 			attacker.setBlockCounter(0);
-			attacker.addToCurrStamina(attacker.getPlayer().getInventory().getActiveSword().getStaminaUsage()/2);
-		}
+			attacker.addToCurrStamina(attacker.getPlayer().getInventory().getActiveSword().getStaminaUsage());
+		}else if(attacker.getCurrMove().equals("SWAP_SWORDS")) {
+	        attacker.swapSwords();
+	        attacker.addToCurrStamina(attacker.getPlayer().getInventory().getActiveSword().getStaminaUsage());
+	    }
 		
 		
 		if(attacker.getCurrStamina() > attacker.getMaxStamina()) {
