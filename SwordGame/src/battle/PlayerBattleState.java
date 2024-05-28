@@ -1,6 +1,5 @@
 package battle;
-import entity.Player;
-import entity.Sword;
+import entity.*;
 
 public class PlayerBattleState {
 
@@ -15,6 +14,9 @@ public class PlayerBattleState {
 	private int activeSwordDurability, maxActiveSwordDurability, inactiveSwordDurability, maxInactiveSwordDurability;
 	private int activeShieldDurability, maxActiveShieldDurability;
 	private Sword activeSword, inactiveSword;
+	private Shield activeShield;
+	private Armour activeArmour;
+	private String playerPos;
 	
 	private int swordChoice;
 	
@@ -36,6 +38,8 @@ public class PlayerBattleState {
 		this.maxActiveShieldDurability = this.activeShieldDurability;
 		this.activeSword = player.getInventory().getActiveSword();
 		this.inactiveSword = player.getInventory().getInactiveSword();
+		this.activeShield = player.getInventory().getActiveShield();
+		this.activeArmour = player.getInventory().getActiveArmour();
 		
 		this.currMove = "NONE";
 		
@@ -252,6 +256,30 @@ public class PlayerBattleState {
 
 	public void setSwordChoice(int swordChoice) {
 		this.swordChoice = swordChoice;
+	}
+
+	public Shield getActiveShield() {
+		return activeShield;
+	}
+
+	public void setActiveShield(Shield activeShield) {
+		this.activeShield = activeShield;
+	}
+
+	public Armour getActiveArmour() {
+		return activeArmour;
+	}
+
+	public void setActiveArmour(Armour activeArmour) {
+		this.activeArmour = activeArmour;
+	}
+
+	public String getPlayerPos() {
+		return playerPos;
+	}
+
+	public void setPlayerPos(String playerPos) {
+		this.playerPos = playerPos;
 	}
 
 	

@@ -1,5 +1,5 @@
 package main;
-import battle.BattleLogic;
+import battle.BattleManager;
 import entity.Player;
 
 public class Main {
@@ -18,7 +18,7 @@ public class Main {
 		
 		MainFrame mf = new MainFrame();
 		//DrawMenu dm = new DrawMenu();
-		BattleLogic bl = new BattleLogic(mf, player, enemy);
+		BattleManager bl = new BattleManager(mf, player, enemy);
 		
 	}
 

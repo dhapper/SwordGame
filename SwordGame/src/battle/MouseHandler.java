@@ -28,14 +28,15 @@ public class MouseHandler implements MouseListener, MouseMotionListener{
 		if(x >= BX_min && x <= BX_max) {
 			if(y >= Y_min && y <= Y_max) {
 				this.playerHovered = "B";
-				this.drawBattle.repaint();
+				//this.drawBattle.repaint();
 			}
 		}else if(x >= AX_min && x <= AX_max) {
 			if(y >= Y_min && y <= Y_max) {
 				this.playerHovered = "A";
-				this.drawBattle.repaint();
+				//this.drawBattle.repaint();
 			}
 		}
+		this.drawBattle.repaint();
 
 	}
 

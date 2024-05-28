@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import battle.BattleLogic;
+import battle.BattleManager;
 import entity.Player;
 
 public class DrawMenu extends JPanel{
@@ -50,7 +50,7 @@ public class DrawMenu extends JPanel{
                 UseMongoDB mongo = new UseMongoDB();
         		Player player = mongo.getPlayer("dhapper");
         		Player enemy = mongo.getPlayer("test");
-        		BattleLogic bl = new BattleLogic(frame, player, enemy);
+        		BattleManager bl = new BattleManager(frame, player, enemy);
             }
         });
 		

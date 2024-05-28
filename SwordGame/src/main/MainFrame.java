@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import battle.BattleLogic;
+import battle.BattleManager;
 import entity.Player;
 
 public class MainFrame extends JFrame{
@@ -58,7 +58,7 @@ public class MainFrame extends JFrame{
 		UseMongoDB mongo = new UseMongoDB();
 		Player player = mongo.getPlayer("dhapper");
 		Player enemy = mongo.getPlayer("test");
-		BattleLogic battleLogic = new BattleLogic(this, player, enemy);
+		BattleManager battleLogic = new BattleManager(this, player, enemy);
 	}
 	
 	public void launchMenu() {

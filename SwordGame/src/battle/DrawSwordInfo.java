@@ -95,13 +95,13 @@ public class DrawSwordInfo {
 		g.drawString(""+inactive.getStaminaUsage(), startX, stringY + stringOffsetY*4);
 		textWidth = metrics.stringWidth(""+inactive.getDurability());
 		startX = this.stringStatX - textWidth/2;
-		g.drawString(""+inactive.getDurability(), startX, stringY + stringOffsetY*5);
+		g.drawString(""+player.getInactiveSwordDurability(), startX, stringY + stringOffsetY*5);
 		
 		drawStatDiff(inactive.getDamage(), active.getDamage(), 1, g);
 		drawStatDiff(inactive.getWeight(), active.getWeight(), 2, g);
 		drawStatDiff(inactive.getPiercing(), active.getPiercing(), 3, g);
 		drawStatDiff(inactive.getStaminaUsage(), active.getStaminaUsage(), 4, g);
-		drawStatDiff(inactive.getDurability(), active.getDurability(), 5, g);
+		drawStatDiff(player.getInactiveSwordDurability(), player.getActiveSwordDurability(), 5, g);
 		
 		g.setColor(Color.BLACK);
 		
