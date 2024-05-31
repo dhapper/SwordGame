@@ -1,11 +1,15 @@
 package entity;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+
+import inventory.Inventory;
 
 public class Player {
 	
 	private String username, nickname;
 	private Inventory inventory;
     private int health, strength, speed, stamina, knowledge;
+    private int[] model;
     
 	public Player(String username) {
 		this.username = username;
@@ -79,7 +83,17 @@ public class Player {
 	
 	public Inventory getInventory() {
 		return inventory;
-		
 	}
+
+	public int[] getModel() {
+		return model;
+	}
+
+	public void setModel(int[] model) {
+		this.model = model;
+	}
+
+	
+
 	
 }

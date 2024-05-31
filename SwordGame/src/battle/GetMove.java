@@ -3,6 +3,8 @@ package battle;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
+import battle.bots.DefaultBot;
+
 public class GetMove {
 	
 	BattleManager battleManager;
@@ -12,21 +14,35 @@ public class GetMove {
 	}
 
 	public void chooseMove(PlayerBattleState player) {
-		
 		battleManager.invalidMoveString = "NONE";
 		while(true) {
-			
 			String nextMove = battleManager.drawBattle.getNextMove();
-			 if (battleManager.drawBattle.isMoveChosen() && checkMoveValidity(player, nextMove)) {
+			 if(battleManager.drawBattle.isMoveChosen() && checkMoveValidity(player, nextMove)) {
 			     player.setCurrMove(nextMove);
 			     return;
 			 }
-			 //battleManager.drawBattle.repaint();
 			 try {
 					TimeUnit.MILLISECONDS.sleep(10);
 			 } catch (InterruptedException e) {
 					e.printStackTrace();
 			 }
+		}
+	}
+	
+	public void botChooseMove(PlayerBattleState bot) {
+		battleManager.invalidMoveString = "NONE";
+		while(true) {
+			DefaultBot defaultBot = new DefaultBot(battleManager);
+			String nextMove = defaultBot.processMoves();
+			if(checkMoveValidity(bot, nextMove)) {
+			     bot.setCurrMove(nextMove);
+			     return;
+			}
+			try {
+				TimeUnit.MILLISECONDS.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

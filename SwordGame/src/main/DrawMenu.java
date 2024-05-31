@@ -1,5 +1,5 @@
 package main;
-import java.awt.Color; 
+import java.awt.Color;  
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +11,8 @@ import javax.swing.JPanel;
 
 import battle.BattleManager;
 import entity.Player;
+import inventory.DrawInventory;
+import utilz.UseMongoDB;
 
 public class DrawMenu extends JPanel{
 	
@@ -33,6 +35,7 @@ public class DrawMenu extends JPanel{
 		
 		
 		
+		
 		JButton battleButton = new JButton("battle");
 		battleButton.setBounds(100, 100, 100, 100);
 		add(battleButton);
@@ -51,6 +54,25 @@ public class DrawMenu extends JPanel{
         		Player player = mongo.getPlayer("dhapper");
         		Player enemy = mongo.getPlayer("test");
         		BattleManager bl = new BattleManager(frame, player, enemy);
+            }
+        });
+		
+		
+		JButton inventoryButton = new JButton("inv");
+		inventoryButton.setBounds(300, 100, 100, 100);
+		add(inventoryButton);
+		
+		inventoryButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	
+            	frame.getContentPane().removeAll();
+            	frame.revalidate();
+            	frame.repaint();
+            	
+            	UseMongoDB mongo = new UseMongoDB();
+        		Player player = mongo.getPlayer("dhapper");
+            	DrawInventory drawInventory = new DrawInventory(player, frame);
             }
         });
 		

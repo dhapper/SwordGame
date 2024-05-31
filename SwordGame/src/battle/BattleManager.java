@@ -1,12 +1,14 @@
 package battle;
 
-import java.util.Scanner;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFrame;
 
-import entity.*;
-import main.*;
+import battle.graphics.DrawAnimation;
+import battle.graphics.DrawBattle;
+import entity.Player;
+import main.DrawMenu;
 
 
 public class BattleManager implements Runnable{
@@ -23,6 +25,14 @@ public class BattleManager implements Runnable{
 	String invalidMoveString;
 	//private volatile boolean running = true;
 	
+	ArrayList<String> turnMessages;
+	
+	int turnNum;
+	
+	int blockMax = 3;
+	double chargeLevel1 = 1.5;
+	double chargeLevel2 = 3.5;
+	
 	public BattleManager(JFrame frame, Player A, Player B) {
 		this.battleOver = false;
 		this.frame = frame;
@@ -35,32 +45,34 @@ public class BattleManager implements Runnable{
 		this.drawBattle = new DrawBattle(frame, this);
 		new Thread(this).start();
 	}
-	
 
 	public String battleLoop(PlayerBattleState A, PlayerBattleState B) {
 		
-		GetMove gm = new GetMove(this);
-		DeathChecker dc = new DeathChecker(this);
-		int turnNum = 1;
+		GetMove getMove = new GetMove(this);
+		DeathChecker deathChecker = new DeathChecker(this);
+		turnNum = 1;
 		
 		while(!battleOver) {
 			
+			this.turnMessages = new ArrayList<String>();
+			
 			//System.out.println("**********************************************");
-			//System.out.println("Turn "+turnNum+":");
+			turnMessages.add("Turn "+turnNum+":");
 			turnNum++;
 			
 			drawBattle.setMoveChosen(false);
 			this.turnA = true;
 			drawBattle.repaint();
-			gm.chooseMove(A);
+			getMove.chooseMove(A);
 			drawBattle.setMoveChosen(false);
 			
 			//System.out.println(A.getName()+"'s current move: "+A.getCurrMove());
 			
-			this.turnA = false;
-			drawBattle.repaint();
-			gm.chooseMove(B);
-			drawBattle.setMoveChosen(false);
+			//////////////////////////////////////////////
+			//this.turnA = false;
+			//drawBattle.repaint();
+			getMove.botChooseMove(B);
+			//drawBattle.setMoveChosen(false);
 			//System.out.println(B.getName()+"'s current Move: "+B.getCurrMove());
 			
 
@@ -68,38 +80,62 @@ public class BattleManager implements Runnable{
 			sc.speedComparison(A, B);
 			TurnLogic tl = new TurnLogic();
 			
-			
-			Thread drawAnimation = new Thread(new DrawAnimation(drawBattle));
-			drawAnimation.start();
-	
-			try {
-				drawAnimation.join();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			
-			//System.out.println("----------------------------------------------");
-			
 			if(sc.speedComparison(A, B) == A) {
+				
 				tl.attack(this, A, B);
-				if(dc.checkDeath(A, B)!=null)
-					return dc.checkDeath(A, B);
+				
+				drawAnimation(1);
+				
+				if(deathChecker.checkDeath(A, B)!=null)
+					return deathChecker.checkDeath(A, B);
+				
 				drawBattle.repaint();
 				tl.attack(this, B, A);
+				
+				drawAnimation(2);
+				
 			} else {
+				
 				tl.attack(this, B, A);
-				if(dc.checkDeath(A, B)!=null)
-					return dc.checkDeath(A, B);
+				
+				drawAnimation(1);
+				
+				if(deathChecker.checkDeath(A, B)!=null)
+					return deathChecker.checkDeath(A, B);
+				
 				drawBattle.repaint();
 				tl.attack(this, A, B);
+				
+				drawAnimation(2);
+				
 			}
+			
 			drawBattle.repaint();
-			if(dc.checkDeath(A, B)!=null)
-				return dc.checkDeath(A, B);
+			if(deathChecker.checkDeath(A, B)!=null)
+				return deathChecker.checkDeath(A, B);
+			
+			/*for(int i = 0; i < turnMessages.size(); i++) {
+				System.out.println(turnMessages.get(i));	
+			}
+			System.out.println();*/
 			
 		}
+		
 		return null;
 	}
+	
+	
+	public void drawAnimation(int moveNum) {
+		Thread drawAnimation = new Thread(new DrawAnimation(drawBattle, moveNum));
+		drawAnimation.start();
+		
+		try {
+			drawAnimation.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	
 	public PlayerBattleState getPbsA() {
 		return this.pbsA;
@@ -131,6 +167,25 @@ public class BattleManager implements Runnable{
 		
 	}
 
+	public ArrayList<String> getTurnMessages() {
+		return this.turnMessages;
+	}
+	
+	public int getTurnNum() {
+		return this.turnNum;
+	}
+
+	public int getBlockMax() {
+		return blockMax;
+	}
+
+	public double getChargeLevel1() {
+		return chargeLevel1;
+	}
+
+	public double getChargeLevel2() {
+		return chargeLevel2;
+	}
 
 	@Override
 	public void run() {

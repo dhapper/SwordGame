@@ -17,6 +17,7 @@ public class PlayerBattleState {
 	private Shield activeShield;
 	private Armour activeArmour;
 	private String playerPos;
+	private int prevHealth, prevStam;
 	
 	private int swordChoice;
 	
@@ -40,10 +41,12 @@ public class PlayerBattleState {
 		this.inactiveSword = player.getInventory().getInactiveSword();
 		this.activeShield = player.getInventory().getActiveShield();
 		this.activeArmour = player.getInventory().getActiveArmour();
+		this.prevHealth = player.getHealth();
+		this.prevStam = player.getStamina();
 		
 		this.currMove = "NONE";
 		
-		this.currMove = null;
+		//this.currMove = null;
 		
 		this.maxHealth = player.getHealth();
 		this.maxStamina = player.getStamina();
@@ -280,6 +283,22 @@ public class PlayerBattleState {
 
 	public void setPlayerPos(String playerPos) {
 		this.playerPos = playerPos;
+	}
+
+	public int getPrevHealth() {
+		return prevHealth;
+	}
+
+	public void setPrevHealth(int prevHealth) {
+		this.prevHealth = prevHealth;
+	}
+
+	public int getPrevStam() {
+		return prevStam;
+	}
+
+	public void setPrevStam(int prevStam) {
+		this.prevStam = prevStam;
 	}
 
 	

@@ -5,17 +5,22 @@ import java.awt.Graphics;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.text.StyleConstants.FontConstants;
 
 import battle.BattleManager;
 import entity.Player;
+import utilz.Constants;
+import utilz.UseMongoDB;
 
 public class MainFrame extends JFrame{
 
 	
+	int height = 600, width = height*3/2;
+	int logWidth = width/3;
+	int screenWidth = width + logWidth;
+	
 	public MainFrame() {
 	
-		
-		int height = 600, width = height*3/2;
 		
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
@@ -27,7 +32,7 @@ public class MainFrame extends JFrame{
 		
     	setVisible(true);
     	setTitle("MainFrame");
-    	setSize(width+16, height+39);	// idk why +16 and +39
+    	setSize(Constants.FRAME_WIDTH + Constants.FRAME_WIDTH_EXTRA, Constants.FRAME_HEIGHT + Constants.FRAME_HEIGHT_EXTRA);	// idk why +16 and +39
     	setVisible(true);
     	setResizable(true);
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -39,8 +44,10 @@ public class MainFrame extends JFrame{
 	}
 	
 	public void launchBattle() {
+		
+		
 		try {
-			Thread.sleep(500);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -48,12 +55,6 @@ public class MainFrame extends JFrame{
 		this.getContentPane().removeAll();
 		this.revalidate();
 		this.repaint();
-		
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 		
 		UseMongoDB mongo = new UseMongoDB();
 		Player player = mongo.getPlayer("dhapper");
@@ -63,6 +64,10 @@ public class MainFrame extends JFrame{
 	
 	public void launchMenu() {
 		DrawMenu drawMenu = new DrawMenu(this);
+	}
+	
+	public int getLogWidth() {
+		return logWidth;
 	}
 	
 }
